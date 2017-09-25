@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "latest",
+      {
+        "es2015": {
+          "modules": false
+        }
+      }
+    ],
+    [
+      "react"
+    ]
+  ],
+  "plugins": [
+    "external-helpers"
+  ],
+  "ignore": [
+    "modules/*.coffee",
+    "modules/**/*.coffee",
+    "specialInput/**",
+    "specialInput/**/**"
+  ]
+}
