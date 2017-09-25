@@ -10,7 +10,10 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 
 ```
 Ruby 2.2.4 (or higher)
-    SASS gem 3.4.21 (or higher)
+    bundler 1.15.4
+    sass 3.4.21 (or higher)
+    sass-globbing 1.1.5 (or higher)
+
     
 node.js 6.11.3 (or higher)
     npm 5.4.1 (or higher)

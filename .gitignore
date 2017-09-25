@@ -60,5 +60,6 @@ typings/
 # sass cache
 .sass-cache/
 
-# packacage lock json
+# lock files
 package-lock.json
+Gemfile.lock

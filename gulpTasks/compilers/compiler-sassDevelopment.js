@@ -3,7 +3,9 @@ module.exports = function (gulp, plugins, projectSettings) {
     return function () {
         gulp.task('compiler-sassDevelopment', () =>
             plugins.rubySass(projectSettings.srcFolderPath + '/sass/layout.sass', {
-                sourcemap: true
+                sourcemap: true,
+                bundleExec: true,
+                require: "sass-globbing"
             })
                 .on('error', plugins.rubySass.logError)
                 .pipe(plugins.sourcemaps.init())

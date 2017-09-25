@@ -1,6 +1,6 @@
 // Watcher - SASS
-module.exports = function (gulp, plugins, projectSettings) {
+module.exports = function (gulp, plugins, projectSettings, callback) {
     return function () {
-        gulp.watch(projectSettings.srcFolderPath + '/sass/**/*.sass', ['compiler-sassCompressed', 'compiler-sassDevelopment']);
+        gulp.watch(projectSettings.srcFolderPath + '/sass/**/*.sass', callback);
     };
 };

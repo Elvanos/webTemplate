@@ -3,7 +3,9 @@ module.exports = function (gulp, plugins, projectSettings) {
     return function () {
         gulp.task('compiler-sassCompressed', () =>
             plugins.rubySass(projectSettings.srcFolderPath + '/sass/layout.sass', {
-                style: 'compressed'
+                style: 'compressed',
+                bundleExec: true,
+                require: "sass-globbing"
             })
                 .on('error', plugins.rubySass.logError)
                 .pipe(plugins.postcss([plugins.autoprefixer()]))
