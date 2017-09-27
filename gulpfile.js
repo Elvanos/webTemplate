@@ -55,13 +55,13 @@
     // Java script (watches js, coffee, jsf and es6 files)
     gulp.task('watcher-javaScript',
         require('./'+projectSettings.gulpTasksFolderPath+'/watchers/watcher-javaScript.js')
-        (gulp, plugins, projectSettings, ['compiler-sassCompressed', 'compiler-sassDevelopment'])
+        (gulp, plugins, projectSettings, ['bundle-compilers-js'])
     );
 
     // SASS
     gulp.task('watcher-sass',
         require('./'+projectSettings.gulpTasksFolderPath+'/watchers/watcher-sass.js')
-        (gulp, plugins, projectSettings, ['bundle-compilers-js'])
+        (gulp, plugins, projectSettings, ['compiler-sassCompressed', 'compiler-sassDevelopment'])
     );
 
 
