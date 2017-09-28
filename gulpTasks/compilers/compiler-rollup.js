@@ -1,10 +1,10 @@
 // Compiler - Rollup
 module.exports = function (gulp, plugins, projectSettings) {
     return function () {
-        return gulp.src(projectSettings.srcFolderPath + '/js/main.js')
+        return gulp.src(projectSettings.settingsPaths.srcFolderPath + '/js/*.js')
                 .pipe(plugins.rollup(
                     {
-                        moduleName: projectSettings.jsFileName,
+                        moduleName: projectSettings.name,
                         onwarn: function (warning) {
                             // Skip certain warnings
 
@@ -53,7 +53,7 @@ module.exports = function (gulp, plugins, projectSettings) {
 
                     }, 'iife'
                 ))
-                .pipe(plugins.rename(projectSettings.jsFileName + ".js"))
-                .pipe(gulp.dest(projectSettings.distFolderPath + '/js'))
+                .pipe(plugins.rename(projectSettings.settingsFileNames.distFileJs + ".js"))
+                .pipe(gulp.dest(projectSettings.settingsPaths.distFolderPath + '/js'))
     };
 };

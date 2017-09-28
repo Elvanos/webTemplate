@@ -2,20 +2,29 @@
 module.exports = function (gulp, plugins, projectSettings) {
     return function () {
         gulp.task('compiler-sassDevelopment', () =>
-            plugins.rubySass(projectSettings.srcFolderPath + '/sass/layout.sass', {
-                sourcemap: true,
-                bundleExec: true,
-                require: "sass-globbing"
-            })
-                .on('error', plugins.rubySass.logError)
+            gulp.src(
+                projectSettings.settingsPaths.srcFolderPath +
+                '/sass/'+
+                projectSettings.settingsFileNames.srcFileSass+
+                '.sass')
+                .pipe(plugins.sass(
+                    {
+                        importer: plugins.globImporter()
+                    }
+                )
+                    .on('error', plugins.sass.logError))
                 .pipe(plugins.sourcemaps.init())
                 .pipe(plugins.postcss([plugins.autoprefixer()]))
-                .pipe(plugins.rename(projectSettings.cssFileName + ".css"))
+                .pipe(plugins.rename(projectSettings.settingsFileNames.distFileCss + ".css"))
                 .pipe(plugins.sourcemaps.write('', {
                     includeContent: false,
-                    sourceRoot: projectSettings.srcFolderPath + '/sass/layout.sass'
+                    sourceRoot:
+                    projectSettings.settingsPaths.srcFolderPath +
+                    '/sass/'+
+                    projectSettings.settingsFileNames.srcFileSass+
+                    '.sass'
                 }))
-                .pipe(gulp.dest(projectSettings.distFolderPath + '/css'))
+                .pipe(gulp.dest(projectSettings.settingsPaths.distFolderPath + '/css/'))
         );
     };
 };

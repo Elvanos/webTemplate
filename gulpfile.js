@@ -5,6 +5,7 @@
     var plugins          = require('gulp-load-plugins')();
     plugins.autoprefixer = require('autoprefixer');
     plugins.runSequence  = require('run-sequence');
+    plugins.globImporter = require('node-sass-glob-importer');
 
     // Rollup + plugins
     plugins.rollup       = require('gulp-better-rollup');
@@ -16,9 +17,7 @@
     plugins.coffeeReact  = require('rollup-plugin-coffee-react');
 
     // Settings
-    var projectSettings  = require('./package.json');
-    projectSettings      = projectSettings.projectSettings;
-
+    var projectSettings  = require('./gulp-config.default.json');
 
     //console.log(plugins);
 
@@ -27,25 +26,25 @@
 
     // SASS development (non-minified)
     gulp.task('compiler-sassDevelopment',
-        require('./'+projectSettings.gulpTasksFolderPath+'/compilers/compiler-sassDevelopment.js')
+        require('./'+projectSettings.settingsPaths.gulptasks+'/compilers/compiler-sassDevelopment.js')
         (gulp, plugins, projectSettings)
     );
 
     // SASS distribution (minified)
     gulp.task('compiler-sassCompressed',
-        require('./'+projectSettings.gulpTasksFolderPath+'/compilers/compiler-sassCompressed.js')
+        require('./'+projectSettings.settingsPaths.gulptasks+'/compilers/compiler-sassCompressed.js')
         (gulp, plugins, projectSettings)
     );
 
     // Rollup (minified + development)
     gulp.task('compiler-rollup',
-        require('./'+projectSettings.gulpTasksFolderPath+'/compilers/compiler-rollup.js')
+        require('./'+projectSettings.settingsPaths.gulptasks+'/compilers/compiler-rollup.js')
         (gulp, plugins, projectSettings)
     );
 
     // Special input JS files (global non-objects)
     gulp.task('compiler-specialInputJS',
-        require('./'+projectSettings.gulpTasksFolderPath+'/compilers/compiler-specialInputJS.js')
+        require('./'+projectSettings.settingsPaths.gulptasks+'/compilers/compiler-specialInputJS.js')
         (gulp, plugins, projectSettings)
     );
 
@@ -54,23 +53,21 @@
 
     // Java script (watches js, coffee, jsf and es6 files)
     gulp.task('watcher-javaScript',
-        require('./'+projectSettings.gulpTasksFolderPath+'/watchers/watcher-javaScript.js')
+        require('./'+projectSettings.settingsPaths.gulptasks+'/watchers/watcher-javaScript.js')
         (gulp, plugins, projectSettings, ['bundle-compilers-js'])
     );
 
     // SASS
+
     gulp.task('watcher-sass',
-        require('./'+projectSettings.gulpTasksFolderPath+'/watchers/watcher-sass.js')
+        require('./'+projectSettings.settingsPaths.gulptasks+'/watchers/watcher-sass.js')
         (gulp, plugins, projectSettings, ['compiler-sassCompressed', 'compiler-sassDevelopment'])
     );
-
-
-
 
 /* ---------- UTILITIES ------------- */
     // Uglify JS file
     gulp.task('utility-uglify',
-        require('./'+projectSettings.gulpTasksFolderPath+'/utilities/utility-uglify.js')
+        require('./'+projectSettings.settingsPaths.gulptasks+'/utilities/utility-uglify.js')
         (gulp, plugins, projectSettings)
     );
 
@@ -102,7 +99,6 @@
         'watcher-javaScript',
         'watcher-sass'
     ]);
-
 
 
 /* ---------- DEFAULT TASK ------------- */

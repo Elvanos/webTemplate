@@ -1,0 +1,21 @@
+{
+  "name": "webApp",
+
+  "settingsPaths": {
+
+    "distFolderPath": "dist",
+    "srcFolderPath": "src",
+    "specialInputPathJS": "specialInput",
+    "gulptasks": "gulpTasks"
+
+  },
+
+  "settingsFileNames": {
+
+    "srcFileSass": "layout",
+    "distFileCss": "layout",
+
+    "distFileJs": "layout"
+
+  }
+}

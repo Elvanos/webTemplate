@@ -1,11 +1,15 @@
 module.exports = function (gulp, plugins, projectSettings) {
     return function () {
            return gulp.src([
-                projectSettings.srcFolderPath + '/js/specialInput/*.js',
-                projectSettings.distFolderPath+'/js/'+projectSettings.jsFileName+'.js'
+                projectSettings.settingsPaths.srcFolderPath +
+                '/js/'+
+                projectSettings.settingsPaths.specialInputPathJS+
+                '/*.js'
+               ,
+                projectSettings.settingsPaths.distFolderPath + '/js/' + projectSettings.settingsFileNames.distFileJs+'.js'
             ])
-                .pipe(plugins.concat(projectSettings.jsFileName+'.concat.js'))
-                .pipe(gulp.dest(projectSettings.distFolderPath + '/js'));
+                .pipe(plugins.concat(projectSettings.settingsFileNames.distFileJs+'.concat.js'))
+                .pipe(gulp.dest(projectSettings.settingsPaths.distFolderPath + '/js'));
 
     };
 };

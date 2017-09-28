@@ -3,12 +3,17 @@ module.exports = function (gulp, plugins, projectSettings) {
         return gulp
             .src(
                 [
-                    projectSettings.distFolderPath+'/js/'+projectSettings.jsFileName+'.concat.js'
+                    projectSettings.settingsPaths.distFolderPath+'/js/*.js',
+                    '!'+projectSettings.settingsPaths.distFolderPath+'/js/*.min.js'
                 ]
             )
             .pipe(plugins.uglify())
-            .pipe(plugins.rename(projectSettings.jsFileName + ".concat.min.js"))
-            .pipe(gulp.dest(projectSettings.distFolderPath + '/js'));
+            .pipe(plugins.filenames("inputFiles"))
+            .pipe(plugins.rename({ extname: '.min.js' }))
+            .pipe(gulp.dest(projectSettings.settingsPaths.distFolderPath + '/js'));
+
+
+
 
     };
 };

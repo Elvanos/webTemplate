@@ -2,7 +2,7 @@ var bigEvil = function(){
     var lalala = 'boo';
     console.log(lalala);
 }
-var layout = (function () {
+var webApp = (function () {
 'use strict';
 
 var jqModule = function jqModule() {

@@ -1,4 +1,4 @@
-var layout = (function () {
+var webApp = (function () {
 'use strict';
 
 var jqModule = function jqModule() {

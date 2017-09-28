@@ -2,12 +2,12 @@
 module.exports = function (gulp, plugins, projectSettings, callback) {
     return function () {
         gulp.watch([
-            projectSettings.srcFolderPath + '/js/main.js',
-            projectSettings.srcFolderPath + '/js/**/*.js',
-            projectSettings.srcFolderPath + '/js/**/*.coffee',
-            projectSettings.srcFolderPath + '/js/**/*.jxs',
-            projectSettings.srcFolderPath + '/js/specialInput/**/**',
-            projectSettings.srcFolderPath + '/js/specialInput/**'
+            projectSettings.settingsPaths.srcFolderPath + '/js/main.js',
+            projectSettings.settingsPaths.srcFolderPath + '/js/**/*.js',
+            projectSettings.settingsPaths.srcFolderPath + '/js/**/*.coffee',
+            projectSettings.settingsPaths.srcFolderPath + '/js/**/*.jxs',
+            projectSettings.settingsPaths.srcFolderPath + '/js/specialInput/**/**',
+            projectSettings.settingsPaths.srcFolderPath + '/js/specialInput/**'
         ], callback);
     };
 };
