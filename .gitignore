@@ -66,5 +66,5 @@ package-lock.json
 # local settings file
 gulp-config.json
 
-#idea settings
+# idea settings
 .idea/
