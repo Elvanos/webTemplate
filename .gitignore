@@ -62,4 +62,6 @@ typings/
 
 # lock files
 package-lock.json
-Gemfile.lock
+
+# local settings file
+gulp-config.json

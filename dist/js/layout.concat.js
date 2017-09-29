@@ -5,29 +5,7 @@ var bigEvil = function(){
 var webApp = (function () {
 'use strict';
 
-var jqModule = function jqModule() {
-
-  $('#message').html('test');
-};
-
-var jqModule2;
-
-jqModule2 = {
-  addTest: (function(_this) {
-    return function() {
-      $('#message').html('teeeeest');
-    };
-  })(undefined),
-  addTest2: (function(_this) {
-    return function() {
-      $('#message').html('teeeeest');
-    };
-  })(undefined)
-};
-
-var jqModule2$1 = jqModule2;
-
-var componentCounter = function componentCounter(location) {
+var exampleComponent = function exampleComponent(location) {
 
     var Counter = React.createClass({
         displayName: "Counter",
@@ -53,16 +31,46 @@ var componentCounter = function componentCounter(location) {
     ReactDOM.render(React.createElement(Counter, null), document.getElementById(location));
 };
 
-var webApp = {
-    modules: {
-        jqModule: jqModule,
-        jqModule2: jqModule2$1
-    },
+var exampleModule = function exampleModule() {
+
+  $('#message').html('test');
+};
+
+var exampleModule2;
+
+exampleModule2 = {
+  addTest: (function(_this) {
+    return function() {
+      $('#message').html('teeeeest');
+    };
+  })(undefined),
+  addTest2: (function(_this) {
+    return function() {
+      $('#message').html('teeeeest');
+    };
+  })(undefined)
+};
+
+var exampleModule2$1 = exampleModule2;
+
+var exampleModule3 = function exampleModule3() {
+
+  $('#message').html('test');
+};
+
+var exportObject = {
     components: {
-        componentCounter: componentCounter
+        exampleComponent: exampleComponent
+    },
+    modules: {
+        exampleModule: exampleModule,
+        exampleModule2: exampleModule2$1,
+        test: {
+            exampleModule3: exampleModule3
+        }
     }
 };
 
-return webApp;
+return exportObject;
 
 }());

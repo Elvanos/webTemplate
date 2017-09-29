@@ -8,7 +8,6 @@ module.exports = function (gulp, plugins, projectSettings) {
                 ]
             )
             .pipe(plugins.uglify())
-            .pipe(plugins.filenames("inputFiles"))
             .pipe(plugins.rename({ extname: '.min.js' }))
             .pipe(gulp.dest(projectSettings.settingsPaths.distFolderPath + '/js'));
 

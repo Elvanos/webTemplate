@@ -1,4 +1,4 @@
-var componentCounter = function (location) {
+var exampleComponent = function (location) {
 
     var Counter = React.createClass({
         getInitialState: function () {
@@ -20,4 +20,4 @@ var componentCounter = function (location) {
     );
 };
 
-export default componentCounter;
+export default exampleComponent;

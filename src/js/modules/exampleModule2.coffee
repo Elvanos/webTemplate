@@ -1,4 +1,4 @@
-jqModule2 =
+exampleModule2 =
   addTest: =>
     $('#message').html('teeeeest')
     return
@@ -6,4 +6,4 @@ jqModule2 =
     $('#message').html('teeeeest')
     return
 
-export default jqModule2
+export default exampleModule2

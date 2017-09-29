@@ -1,7 +1,7 @@
-var jqModule = () => {
+var exampleModule = () => {
 
  $('#message').html('test');
 
 };
 
-export default jqModule;
+export default exampleModule;
