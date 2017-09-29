@@ -1,4 +1,4 @@
-import exampleComponent from './components/exampleComponent.js';
+import exampleComponent from './components/exampleComponent.jsx';
 import exampleModule from './modules/exampleModule.js';
 import exampleModule2 from './modules/exampleModule2.coffee';
 import exampleModule3 from './modules/test/exampleModule3.js';
