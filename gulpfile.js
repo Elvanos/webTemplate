@@ -149,13 +149,13 @@
     // Compiler bundle JS
     gulp.task('finalReport', function(done) {
 
+        done();
         if (warningMessage.length > 0) {
             console.warn(warningMessage);
         }else{
             warningMessage = "Innitial run succesfull.\nEverything works as intended.\nHappy coding!"
             console.log(warningMessage);
         }
-        done();
 
     });
 
