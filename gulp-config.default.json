@@ -1,6 +1,8 @@
 {
   "name": "webApp",
-
+  "settingsGeneration": {
+    "autogenBuildFile": "true"
+  },
   "settingsPaths": {
 
     "distFolderPath": "dist",

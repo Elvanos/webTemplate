@@ -2,6 +2,7 @@
 module.exports = function (gulp, plugins, projectSettings) {
     return function () {
 
+        if (projectSettings.settingsGeneration.autogenBuildFile === "true") {
         return gulp.src(projectSettings.settingsPaths.srcFolderPath + '/js/importsBundle.js')
             .pipe(plugins.beautify
                 (
@@ -9,7 +10,10 @@ module.exports = function (gulp, plugins, projectSettings) {
                 )
             )
             .pipe(gulp.dest(projectSettings.settingsPaths.srcFolderPath + '/js'));
-        console.log('Done beatifying');
+        }else{
+            return true;
+        }
+
     };
 }
 ;

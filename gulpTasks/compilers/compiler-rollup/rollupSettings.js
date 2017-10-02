@@ -1,6 +1,18 @@
 module.exports = function (gulp, plugins, projectSettings) {
+
+
+    console.log(projectSettings.settingsGeneration);
+
+    if (projectSettings.settingsGeneration.autogenBuildFile === "true") {
+        var sourceFile = 'importsBundle.js';
+    } else {
+        var sourceFile = 'manualBundle.js';
+    }
+
+    console.log(sourceFile);
+
     return function () {
-        return gulp.src(projectSettings.settingsPaths.srcFolderPath + '/js/importsBundle.js')
+        return gulp.src(projectSettings.settingsPaths.srcFolderPath + '/js/'+sourceFile)
             .pipe(plugins.rollup(
                 {
                     moduleName: projectSettings.name,
@@ -38,7 +50,6 @@ module.exports = function (gulp, plugins, projectSettings) {
             )
             .pipe(plugins.rename(projectSettings.settingsFileNames.distFileJs + ".js"))
             .pipe(gulp.dest(projectSettings.settingsPaths.distFolderPath + '/js'))
-        console.log('Done rolling');
     };
 }
 ;

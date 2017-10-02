@@ -38,5 +38,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "run-sequence": "^2.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "sharp": "^0.18.4"
+  }
 }
