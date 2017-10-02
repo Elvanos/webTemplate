@@ -17,6 +17,8 @@ module.exports = function (gulp, plugins, projectSettings) {
                 var partsArray = [];
                 var importsString = '';
 
+                var uniqueId = 0;
+
                 // Generate imports and prepare them as string
                 function treeSearch(treeLevel) {
 
@@ -38,6 +40,8 @@ module.exports = function (gulp, plugins, projectSettings) {
                         }
                         ;
 
+
+
                         // If directory
                         if (treeLevel[i].type === 'directory') {
 
@@ -52,12 +56,15 @@ module.exports = function (gulp, plugins, projectSettings) {
                         // If file
                         if (treeLevel[i].type === 'file') {
 
+                            uniqueId++;
+                            console.log(uniqueId);
+
                             // Build object
                             var fileName = treeLevel[i].name;
 
                             fileName = fileName.replace(treeLevel[i].extension, "");
 
-                            objectBody += fileName + ' :' + fileName + ',';
+                            objectBody += fileName +' :' + fileName+ '_'+uniqueId+',';
 
                             // Build import list
                             var importPath = treeLevel[i].path;
@@ -69,7 +76,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                             importPath = importPath.replace(projectSettings.settingsPaths.srcFolderPath + "/js/", "");
 
                             // Add file to import string
-                            importsString += 'import ' + fileName + ' from \'./' + importPath + '\';';
+                            importsString += 'import ' + fileName+'_'+uniqueId+ ' from \'./' + importPath + '\';';
 
                         }
                         ;

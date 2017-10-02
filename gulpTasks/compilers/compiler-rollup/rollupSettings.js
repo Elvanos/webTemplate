@@ -1,7 +1,7 @@
 module.exports = function (gulp, plugins, projectSettings) {
 
 
-    console.log(projectSettings.settingsGeneration);
+    //console.log(projectSettings.settingsGeneration);
 
     if (projectSettings.settingsGeneration.autogenBuildFile === "true") {
         var sourceFile = 'importsBundle.js';
@@ -9,7 +9,7 @@ module.exports = function (gulp, plugins, projectSettings) {
         var sourceFile = 'manualBundle.js';
     }
 
-    console.log(sourceFile);
+    //console.log(sourceFile);
 
     return function () {
         return gulp.src(projectSettings.settingsPaths.srcFolderPath + '/js/'+sourceFile)
