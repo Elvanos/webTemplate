@@ -4,15 +4,18 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 
 ## Support & Features
 * Configurable structure of the directories along with file names
-    * Automatically generated settings file for easy start   
+* Automatically generated settings file for easy start
+* Supports both manual and automated modes for bundling JS files 
     
 * Gulp task runner
     * Fully automated, just needs to be started once
+    * Support both for manual and automated tasks (can be configured) 
     * Custom error/smooth run reports (WIP) 
  
 * SASS preprocessor autobuild & watcher
     * LibSass 3.5 and node-sass
     * Minified & dev version of the style file
+    * Support for additional .sass/.scss files outside of the main bundle if needed (along with minified version generated)
     * Supports glob sass importing for easier usage
     
 * Rollup JS autobuild tool & watcher
@@ -20,6 +23,7 @@ A template project for a new webpage/webapp that aims to provide out of the box 
         * Input can be mixed in any way as long each is it a separate file
     * Automatic custom processing of directories and files
         * Supported modes: Object literal (more WIP)
+        * Support infinite recursive subdirectories/files and comes up with a custom ID build system
         * Custom files/libraries/script batches can be imported separately without being added to default output
     * Minified & dev version of the js output files
 
@@ -152,11 +156,13 @@ gulp-config.json will NEVER update automatically through github (or any other) u
     * distFileJs - the name of the desired js file
     
 #### How the automated object literal builder works
-The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx and .coffee files.
+The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx and .coffee files. No need to worry about duplicate file names in the structure, each file gets assigned a custom ID during generation (does not affect the final bundle naming of properties/methods/sub-objects).
 
 This is accoplished by recursively scanning the directory structure of your <sourceDiretory>/js/ directory and automatically creating an importsBundle.js file for Rollup, before rollup is run.
 
 importsBundle.js is regenerated every time the builder is run, so no need to update it manually.
+
+This feature can be turned off in case you wish to create the file manually instead. Both manual and automated files are exclusive, dont override each other and can co-exist next to each other (only one gets generated at a time based on the settings tho).
 
 * Example file structure
 ```
