@@ -6,24 +6,24 @@ module.exports = function (gulp, plugins, projectSettings) {
         if (projectSettings.settingsGeneration.autogenBuildFile === "true") {
             function buildMainJS() {
                 // Get all files for import
-                var fileTree = plugins.dirTree('./' + projectSettings.settingsPaths.srcFolderPath + '/js');
+                let fileTree = plugins.dirTree('./' + projectSettings.settingsPaths.srcFolderPath + '/js/scripts');
 
                 // Set default string for opening and closing of the object
-                var objectHeader = 'var exportObject = {';
-                var objectFooter = '}; export default exportObject;';
-                var objectBody = '';
+                let objectHeader = 'var exportObject = {';
+                let objectFooter = '}; export default exportObject;';
+                let objectBody = '';
 
                 // Prepare variables for generating imports
-                var partsArray = [];
-                var importsString = '';
+                let partsArray = [];
+                let importsString = '';
 
-                var uniqueId = 0;
+                let uniqueId = 0;
 
                 // Generate imports and prepare them as string
                 function treeSearch(treeLevel) {
 
                     treeLevel = treeLevel.children;
-                    for (var i = 0, len = treeLevel.length; i < len; i++) {
+                    for (let i = 0, len = treeLevel.length; i < len; i++) {
 
                         // Excluded
                         if (
@@ -38,7 +38,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                         ) {
                             continue;
                         }
-                        ;
+
 
 
 
@@ -51,55 +51,54 @@ module.exports = function (gulp, plugins, projectSettings) {
                             objectBody += '},';
 
                         }
-                        ;
+
 
                         // If file
                         if (treeLevel[i].type === 'file') {
 
                             uniqueId++;
-                            console.log(uniqueId);
 
                             // Build object
-                            var fileName = treeLevel[i].name;
+                            let fileName = treeLevel[i].name;
 
                             fileName = fileName.replace(treeLevel[i].extension, "");
 
                             objectBody += fileName +' :' + fileName+ '_'+uniqueId+',';
 
                             // Build import list
-                            var importPath = treeLevel[i].path;
+                            let importPath = treeLevel[i].path;
 
                             // Fix backslashes
                             importPath = importPath.replace(/\\/g, "/");
 
                             // Fix pathing for imports
-                            importPath = importPath.replace(projectSettings.settingsPaths.srcFolderPath + "/js/", "");
+                            importPath = importPath.replace(projectSettings.settingsPaths.srcFolderPath + "/js/scripts/", "");
 
                             // Add file to import string
-                            importsString += 'import ' + fileName+'_'+uniqueId+ ' from \'./' + importPath + '\';';
+                            importsString += 'import ' + fileName+'_'+uniqueId+ ' from \'./scripts/' + importPath + '\';';
 
                         }
-                        ;
+
 
 
                     }
-                    ;
+
 
                 }
 
                 treeSearch(fileTree);
 
 
-                var fileContent = importsString + objectHeader + objectBody + objectFooter;
+                let fileContent = importsString + objectHeader + objectBody + objectFooter;
 
                 return fileContent;
             }
-            var fileContent = buildMainJS();
+            let fileContent = buildMainJS();
             return plugins.fs.writeFileSync('./' + projectSettings.settingsPaths.srcFolderPath + '/js/importsBundle.js', fileContent);
         } else {
             return true;
         }
-        ;
+
 
 
 

@@ -1,12 +1,12 @@
 module.exports = function (gulp, plugins, projectSettings) {
 
-
+    let sourceFile;
     //console.log(projectSettings.settingsGeneration);
 
     if (projectSettings.settingsGeneration.autogenBuildFile === "true") {
-        var sourceFile = 'importsBundle.js';
+        sourceFile = 'importsBundle.js';
     } else {
-        var sourceFile = 'manualBundle.js';
+        sourceFile = 'manualBundle.js';
     }
 
     //console.log(sourceFile);
@@ -16,6 +16,7 @@ module.exports = function (gulp, plugins, projectSettings) {
             .pipe(plugins.rollup(
                 {
                     moduleName: projectSettings.name,
+                    //cache: true,
                     onwarn: function (warning) {
                         // Skip certain warnings
 

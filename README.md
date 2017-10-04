@@ -80,11 +80,12 @@ node.js 6.11.3 (or higher)
     [webTemplate github page](https://github.com/Elvanos/webTemplate)
 3. Install the global NPM packages by following commands
     ```
-    npm install -G babel-cli
-    npm install -G babel-preset-react
-    npm install -G rollup
-    npm install -G coffeescript
-    npm install -G react    
+    npm install -g babel-cli
+    npm install -g babel-preset-react
+    npm install -g rollup
+    npm install -g coffeescript
+    npm install -g react
+    npm install -g gulp    
     ``` 
 4. Open your favorite terminal/cmd interface, navigate to your work folder
     * Type "npm install" and wait and wait the template finishes installing
@@ -105,8 +106,40 @@ The webTemplate ships with a built in gulp-config.default.json file with default
 gulp-config.json will NEVER update automatically through github (or any other) update since it is not a part of the default setup and is solely meant for setup of the particular project webTemplate is being used for.
 
 #### gulp-config.json options
+```json
+{
+  "name": "webApp",
+  "settingsGeneration": {
+    "autogenBuildFile": "true",
+    "allowAdditionalSass": "false",
+    "compileOnLoad": "false"
+  },
+  "settingsPaths": {
+
+    "distFolderPath": "example/dist",
+    "srcFolderPath": "example/src",
+    "specialInputPathJS": "specialInput",
+    "gulptasks": "gulpTasks"
+
+  },
+
+  "settingsFileNames": {
+
+    "srcFileSass": "layout",
+    "distFileCss": "layout",
+
+    "distFileJs": "layout"
+
+  }
+}
+```
 * name - name of your app, will be used to generate the main javascript object by rollup
 
+* settingsGeneration
+    * autogenBuildFile - (true/false) - determines if the output file should be generated automatically via the automated object literal builder or if you wish to use a manual file that will never be automatically overwritten, both can exist simultaneously
+    * allowAdditionalSass - (true/false) - support for standalone additional sass/scss files in "sass/additionalFiles" subdirectory. Each of these files will generate one one-to-one css file (along with a minified version). Directory also contains an "ignore" directory for extra files that will be completely ignored by the compiler(for partials/libraries/mixins/etc.)
+    * compileOnLoad - (true/false) - Determines if the compilers should run once on load ever time you start "gulp" command. Otherwise, they can be called via singular gulp commands
+    
 * settingsPaths
     * distFolderPath - folder for all the automatically generated files
     * srcFolderPath - folder for all the source files
@@ -127,19 +160,20 @@ importsBundle.js is regenerated every time the builder is run, so no need to upd
 
 * Example file structure
 ```
-/src/
-    /js/
-        .babelrc
-        importsBundle.js
-        /components/
-            exampleComponent.jsx
-        /modules/
-            exampleModule.js
-            exampleModule2.coffee
-            /test/
-                exampleModule3.js            
-        /specialInput/
-            test.js
+/example
+    /src/
+        /js/
+            .babelrc
+            importsBundle.js
+            /components/
+                exampleComponent.jsx
+            /modules/
+                exampleModule.js
+                exampleModule2.coffee
+                /test/
+                    exampleModule3.js            
+            /specialInput/
+                test.js
 ```
 * Example importsBundle.js code automatically generated from previous structure
 ```javascript

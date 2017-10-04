@@ -48,12 +48,23 @@
         (gulp, plugins, projectSettings)
     );
 
+        // Additional SASS development (non-minified)
+        gulp.task('compiler-additionalSassDevelopment',
+            require('./'+projectSettings.settingsPaths.gulptasks+'/compilers/compiler-additionalSassDevelopment.js')
+            (gulp, plugins, projectSettings)
+        );
 
     // SASS distribution (minified)
     gulp.task('compiler-sassCompressed',
         require('./'+projectSettings.settingsPaths.gulptasks+'/compilers/compiler-sassCompressed.js')
         (gulp, plugins, projectSettings)
     );
+
+        // Additional SASS distribution (minified)
+        gulp.task('compiler-additionalSassCompressed',
+            require('./'+projectSettings.settingsPaths.gulptasks+'/compilers/compiler-additionalSassCompressed.js')
+            (gulp, plugins, projectSettings)
+        );
 
 
     // Rollup (minified + development)
@@ -108,6 +119,11 @@
         (gulp, plugins, projectSettings, ['compiler-sassCompressed', 'compiler-sassDevelopment'])
     );
 
+    gulp.task('watcher-additionalSass',
+        require('./'+projectSettings.settingsPaths.gulptasks+'/watchers/watcher-additionalSass.js')
+        (gulp, plugins, projectSettings, ['compiler-additionalSassCompressed', 'compiler-additionalSassDevelopment'])
+    );
+
 /* ---------- UTILITIES ------------- */
     // Uglify JS file
     gulp.task('utility-uglify',
@@ -130,19 +146,68 @@
 
     // Compiler bundle SASS
     gulp.task('bundle-compilers-sass', function(callback) {
-        plugins.runSequence(
-            [
-                'compiler-sassCompressed',
-                'compiler-sassDevelopment'
-            ],
-            callback);
+
+        if (projectSettings.settingsGeneration.allowAdditionalSass === "true"){
+
+            plugins.runSequence(
+                [
+                    'compiler-sassCompressed',
+                    'compiler-sassDevelopment',
+                    'compiler-additionalSassCompressed',
+                    'compiler-additionalSassDevelopment'
+                ],
+                callback);
+
+        }else{
+
+            plugins.runSequence(
+                [
+                    'compiler-sassCompressed',
+                    'compiler-sassDevelopment'
+                ],
+                callback);
+
+        }
     });
 
     // Watcher bundle
-    gulp.task('bundle-watchers',[
-        'watcher-javaScript',
-        'watcher-sass'
-    ]);
+    gulp.task('bundle-watchers',function(callback){
+
+        if (projectSettings.settingsGeneration.allowAdditionalSass === "true"){
+
+            plugins.runSequence(
+                [
+                    'watcher-javaScript',
+                    'watcher-sass',
+                    'watcher-additionalSass'
+                ],
+                callback);
+
+        }else{
+
+            plugins.runSequence(
+                [
+                    'watcher-javaScript',
+                    'watcher-sass'
+                ],
+                callback);
+        }
+
+    });
+
+
+/* ---------- MANUAL TASKS ------------- */
+
+// Run different bundles
+gulp.task('forceCompile', function(callback) {
+    plugins.runSequence(
+        [
+            'bundle-compilers-js',
+            'bundle-compilers-sass'
+        ],
+        callback);
+
+});
 
 /* ---------- FINAL REPORT ------------- */
 
@@ -153,7 +218,7 @@
         if (warningMessage.length > 0) {
             console.warn(warningMessage);
         }else{
-            warningMessage = "Innitial run succesfull.\nEverything works as intended.\nHappy coding!"
+            warningMessage = "Innitial run succesfull.\nEverything works as intended.\nHappy coding!";
             console.log(warningMessage);
         }
 
@@ -163,13 +228,20 @@
 
     // Run different bundles
     gulp.task('default', function(callback) {
-        plugins.runSequence(
-                [
-                    'bundle-compilers-js',
-                    'bundle-compilers-sass'
-                ],
+
+        if (projectSettings.settingsGeneration.compileOnLoad === "true"){
+
+            plugins.runSequence(
+                'forceCompile',
                 'bundle-watchers',
                 'finalReport',
                 callback);
+        }else {
+
+            plugins.runSequence(
+                'bundle-watchers',
+                'finalReport',
+                callback);
+        }
 
         });

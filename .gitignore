@@ -68,3 +68,6 @@ gulp-config.json
 
 # idea settings
 .idea/
+
+# ignore example dist folder
+example/dist

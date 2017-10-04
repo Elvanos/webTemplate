@@ -2,7 +2,7 @@ module.exports = function (gulp, plugins, projectSettings) {
     return function () {
            return gulp.src([
                 projectSettings.settingsPaths.srcFolderPath +
-                '/js/'+
+                '/js/scripts/'+
                 projectSettings.settingsPaths.specialInputPathJS+
                 '/*.js'
                ,
