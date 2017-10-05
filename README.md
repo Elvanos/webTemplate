@@ -7,7 +7,8 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 ## Support & Features
 * Configurable structure of the directories along with file names
 * Automatically generated settings file for easy start
-* Supports both manual and automated modes for bundling JS files 
+* Supports both manual and automated modes for bundling JS files
+* Automatic checking and fixing of old/partial config files 
     
 * Gulp task runner
     * Fully automated, just needs to be started once
