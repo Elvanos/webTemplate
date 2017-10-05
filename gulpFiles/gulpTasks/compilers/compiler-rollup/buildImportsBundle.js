@@ -2,11 +2,15 @@
 module.exports = function (gulp, plugins, projectSettings) {
     return function () {
 
+        let autogenBuildFile = projectSettings.settingsGeneration.autogenBuildFile;
+        let srcFolderPath = projectSettings.settingsPaths.srcFolderPath;
+        let specialInputPathJS = projectSettings.settingsPaths.specialInputPathJS;
+        
         // Generate file only if "autogenBuildFile" is set to "true"
-        if (projectSettings.settingsGeneration.autogenBuildFile === "true") {
+        if (autogenBuildFile === "true") {
             function buildMainJS() {
                 // Get all files for import
-                let fileTree = plugins.dirTree('./' + projectSettings.settingsPaths.srcFolderPath + '/js/scripts');
+                let fileTree = plugins.dirTree('./' + srcFolderPath + '/js/scripts');
 
                 // Set default string for opening and closing of the object
                 let objectHeader = 'var exportObject = {';
@@ -29,7 +33,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                         if (
                             treeLevel[i].name === '.babelrc'
                             ||
-                            treeLevel[i].name === 'specialInput'
+                            treeLevel[i].name === specialInputPathJS
                             ||
                             treeLevel[i].name === 'importsBundle.js'
                             ||
@@ -38,9 +42,6 @@ module.exports = function (gulp, plugins, projectSettings) {
                         ) {
                             continue;
                         }
-
-
-
 
                         // If directory
                         if (treeLevel[i].type === 'directory') {
@@ -72,18 +73,13 @@ module.exports = function (gulp, plugins, projectSettings) {
                             importPath = importPath.replace(/\\/g, "/");
 
                             // Fix pathing for imports
-                            importPath = importPath.replace(projectSettings.settingsPaths.srcFolderPath + "/js/scripts/", "");
+                            importPath = importPath.replace(srcFolderPath + "/js/scripts/", "");
 
                             // Add file to import string
                             importsString += 'import ' + fileName+'_'+uniqueId+ ' from \'./scripts/' + importPath + '\';';
 
                         }
-
-
-
                     }
-
-
                 }
 
                 treeSearch(fileTree);
@@ -94,7 +90,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                 return fileContent;
             }
             let fileContent = buildMainJS();
-            return plugins.fs.writeFileSync('./' + projectSettings.settingsPaths.srcFolderPath + '/js/importsBundle.js', fileContent);
+            return plugins.fs.writeFileSync('./' + srcFolderPath + '/js/importsBundle.js', fileContent);
         } else {
             return true;
         }

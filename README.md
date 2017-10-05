@@ -1,6 +1,6 @@
 # webTemplate project
 
-- Version 1.1.1 
+- Version 1.1.3
 
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
@@ -24,6 +24,7 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 * Rollup JS autobuild tool & watcher
     * Supports compiling from JSX, ES6 and Coffeescript
         * Input can be mixed in any way as long each is it a separate file
+    * Support for additional JS files outside of the main bundle if needed (along with minified version generated)
     * Automatic custom processing of directories and files
         * Supported modes: Object literal (more WIP)
         * Support infinite recursive subdirectories/files and comes up with a custom ID build system
@@ -41,11 +42,12 @@ node.js 6.11.3 (or higher)
     npm 5.4.1 (or higher)
     
     Global NPM packages (install manually)
-       "babel-cli": "^6.26.0",
-       "babel-preset-react": "^6.5.0",
-       "rollup": "^0.49.3",
-       "coffeescript": "^2.0.0-beta5",
-       "react": "^15.6.1"
+        "babel-cli": "^6.26.0",
+        "babel-preset-react": "^6.5.0",
+        "rollup": "^0.49.3",
+        "coffeescript": "^2.0.0-beta5",
+        "react": "^15.6.1",
+        "gulp": "^3.9.1"
         
     Local NPM dev dependencies (install via "npm install")
         "autoprefixer": "^7.1.4",
@@ -54,6 +56,7 @@ node.js 6.11.3 (or higher)
         "babel-plugin-external-helpers": "^6.22.0",
         "babel-preset-latest": "^6.24.1",
         "babel-preset-react": "^6.24.1",
+        "console-sync": "0.0.1",
         "directory-tree": "^2.0.0",
         "gulp": "^3.9.1",
         "gulp-beautify": "^2.0.1",
@@ -104,40 +107,35 @@ node.js 6.11.3 (or higher)
         gulp
         ```
         * You should get a message saying that a new "gulp-config.json" file has been created unless you had one before
-5. Set you gulp-config.json to your needs
-6. Done! Just make sure you run "gulp" command from your directory every time you start working on your project again 
+5. Set your gulp-config.json to your needs (can be found in "gulpFiles" directory)
+6. Done! Just make sure you run "gulp" command from your directory every time you start working on your project again (and feel free to explore all the option and manual commands)
 
 ### Setting gulp-config.json
 The webTemplate ships with a built in gulp-config.default.json file with default settings for the project. Gulp checks at start if gulp-config.json exists. If it doesnt, it copies settings from gulp-config.default.json and created a new one.
 
-gulp-config.json will NEVER update automatically through github (or any other) update since it is not a part of the default setup and is solely meant for setup of the particular project webTemplate is being used for.
+gulp-config.json will NEVER update automatically through github (or any other, unless manually overwritten) update since it is not a part of the default setup and is solely meant for setup of the particular project webTemplate is being used for.
 
 #### gulp-config.json options
 ```json
 {
-  "name": "webApp",
-  "settingsGeneration": {
-    "autogenBuildFile": "true",
-    "allowAdditionalSass": "false",
-    "compileOnLoad": "false"
-  },
-  "settingsPaths": {
-
-    "distFolderPath": "example/dist",
-    "srcFolderPath": "example/src",
-    "specialInputPathJS": "specialInput",
-    "gulptasks": "gulpTasks"
-
-  },
-
-  "settingsFileNames": {
-
-    "srcFileSass": "layout",
-    "distFileCss": "layout",
-
-    "distFileJs": "layout"
-
-  }
+    "name": "webApp",
+    "settingsGeneration": {
+        "autogenBuildFile": "true",
+        "compileOnLoad": "false",
+        "allowAdditionalSass": "false",
+        "allowAdditionalJS": "false"
+    },
+    "settingsPaths": {
+        "distFolderPath": "example/dist",
+        "srcFolderPath": "example/src",
+        "specialInputPathJS": "_additionalFiles",
+        "specialInputPathSass": "_additionalFiles"
+    },
+    "settingsFileNames": {
+        "srcFileSass": "layout",
+        "distFileCss": "layout",
+        "distFileJs": "layout"
+    }
 }
 ```
 * name - name of your app, will be used to generate the main javascript object by rollup
@@ -145,13 +143,14 @@ gulp-config.json will NEVER update automatically through github (or any other) u
 * settingsGeneration
     * autogenBuildFile - (true/false) - determines if the output file should be generated automatically via the automated object literal builder or if you wish to use a manual file that will never be automatically overwritten, both can exist simultaneously
     * allowAdditionalSass - (true/false) - support for standalone additional sass/scss files in "sass/additionalFiles" subdirectory. Each of these files will generate one one-to-one css file (along with a minified version). Directory also contains an "ignore" directory for extra files that will be completely ignored by the compiler(for partials/libraries/mixins/etc.)
+    * allowAdditionalJS - (true/false) - support for extra files that should not be bunched in the big batch generated by Rollup. This can include libraries or other files that cant handle such treatment (final results will be a single concatenated file)
     * compileOnLoad - (true/false) - Determines if the compilers should run once on load ever time you start "gulp" command. Otherwise, they can be called via singular gulp commands
     
 * settingsPaths
     * distFolderPath - folder for all the automatically generated files
     * srcFolderPath - folder for all the source files
     * specialInputPathJS - folder for all separate JS files you wish to add (script that dont fit in the main js object or libraries)
-    * gulptasks - folder for particular gulp tasks
+    * specialInputPathSass - folder for all separate JS files you dont wish to clump up with the main Rollup object output
     
 * settingsFileNames
     * srcFileSass - the name of the main source sass file
@@ -203,4 +202,31 @@ This feature can be turned off in case you wish to create the file manually inst
         },
     };
     export default exportObject;
+```
+
+## Version history
+
+1.1.3 (Oct. 5. 2017 / 5. 10. 2017)
+```
+Added features 
+    Settings for allowing/disallowing additional files on JS compilers
+    Added sync console logging (no more random logs)
+    Added version details to README file
+    Added support for manual tasks
+        Added manual compile task (forceCompile)
+    
+Removed features
+    Settings for gulpTasks directory in the config file    
+    
+Changes
+    Redone directory structure
+    Added quick-variables inside modules and tasks
+    Main file split into more modules/tasks
+    Updated multiple functions
+    Fixed and updated file watchers for allowing/disallowing of additionalFiles in both JS and SASS
+    Various bug fixes
+    Added debug console logs for development
+
+Dev/WIP features
+    Testing "sharp" for mass image processing
 ```

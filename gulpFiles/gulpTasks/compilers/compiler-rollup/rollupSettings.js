@@ -1,21 +1,24 @@
 module.exports = function (gulp, plugins, projectSettings) {
 
     let sourceFile;
-    //console.log(projectSettings.settingsGeneration);
 
-    if (projectSettings.settingsGeneration.autogenBuildFile === "true") {
+    let autogenBuildFile = projectSettings.settingsGeneration.autogenBuildFile;
+    let srcFolderPath = projectSettings.settingsPaths.srcFolderPath;
+    let name = projectSettings.name;
+    let distFileJs = projectSettings.settingsFileNames.distFileJs;
+    let distFolderPawth = projectSettings.settingsPaths.distFolderPath;
+
+    if (autogenBuildFile === "true") {
         sourceFile = 'importsBundle.js';
     } else {
         sourceFile = 'manualBundle.js';
     }
 
-    //console.log(sourceFile);
-
     return function () {
-        return gulp.src(projectSettings.settingsPaths.srcFolderPath + '/js/'+sourceFile)
+        return gulp.src(srcFolderPath + '/js/'+sourceFile)
             .pipe(plugins.rollup(
                 {
-                    moduleName: projectSettings.name,
+                    moduleName: name,
                     //cache: true,
                     onwarn: function (warning) {
                         // Skip certain warnings
@@ -49,8 +52,8 @@ module.exports = function (gulp, plugins, projectSettings) {
                 }, 'iife'
                 )
             )
-            .pipe(plugins.rename(projectSettings.settingsFileNames.distFileJs + ".js"))
-            .pipe(gulp.dest(projectSettings.settingsPaths.distFolderPath + '/js'))
+            .pipe(plugins.rename(distFileJs + ".js"))
+            .pipe(gulp.dest(distFolderPawth + '/js'))
     };
 }
 ;

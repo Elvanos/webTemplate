@@ -2,24 +2,19 @@
   "name": "webApp",
   "settingsGeneration": {
     "autogenBuildFile": "true",
+    "compileOnLoad": "false",
     "allowAdditionalSass": "false",
-    "compileOnLoad": "false"
+    "allowAdditionalJS": "false"
   },
   "settingsPaths": {
-
     "distFolderPath": "example/dist",
     "srcFolderPath": "example/src",
-    "specialInputPathJS": "specialInput",
-    "gulptasks": "gulpTasks"
-
+    "specialInputPathJS": "_additionalFiles",
+    "specialInputPathSass": "_additionalFiles"
   },
-
   "settingsFileNames": {
-
     "srcFileSass": "layout",
     "distFileCss": "layout",
-
     "distFileJs": "layout"
-
   }
 }
