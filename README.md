@@ -1,5 +1,7 @@
 # webTemplate project
 
+- Version 1.1.1 
+
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
 ## Support & Features
