@@ -5,14 +5,14 @@
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
 ## README Content
-1. [Support & Features](#support-&-features)
-2. Getting Started
-    1. Prerequisites
-    2. Install guide
-    3. Setting gulp-config.json
-    4. How the automated object literal builder works
-3. Manual Tasks
-4. Version history
+1. [Support & Features](#support--features)
+2. [Getting Started](#getting-started)
+    1. [Prerequisites](#prerequisites)
+    2. [Install guide](#install-guide)
+    3. [Setting gulp-config.json](#setting-gulp-config.json)
+    4. [How the automated object literal builder works](#how-the-automated-object-literal-builder-works)
+3. [Manual Tasks](#manual-tasks)
+4. [Version history](#version-history)
 
 ## Support & Features
 * Configurable structure of the directories along with file names
