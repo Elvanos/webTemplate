@@ -1,14 +1,25 @@
 # webTemplate project
 
-- Version 1.1.4
+- Version 1.1.5
 
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
+
+## README Content
+1. [Support & Features](#Support & Features)
+2. Getting Started
+    1. Prerequisites
+    2. Install guide
+    3. Setting gulp-config.json
+    4. How the automated object literal builder works
+3. Manual Tasks
+4. Version history
 
 ## Support & Features
 * Configurable structure of the directories along with file names
 * Automatically generated settings file for easy start
 * Supports both manual and automated modes for bundling JS files
-* Automatic checking and fixing of old/partial config files 
+* Automatic checking and fixing of old/partial config files
+* Deconstruction of any big input object into individual files ready to be bungled again 
     
 * Gulp task runner
     * Fully automated, just needs to be started once
@@ -51,31 +62,33 @@ node.js 6.11.3 (or higher)
         
     Local NPM dev dependencies (install via "npm install")
         "autoprefixer": "^7.1.4",
-           "babel-core": "^6.26.0",
-           "babel-loader": "^7.1.2",
-           "babel-plugin-external-helpers": "^6.22.0",
-           "babel-preset-latest": "^6.24.1",
-           "babel-preset-react": "^6.24.1",
-           "console-sync": "0.0.1",
-           "directory-tree": "^2.0.0",
-           "gulp": "^3.9.1",
-           "gulp-beautify": "^2.0.1",
-           "gulp-better-rollup": "^1.1.1",
-           "gulp-concat": "^2.6.1",
-           "gulp-load-plugins": "^1.5.0",
-           "gulp-postcss": "^7.0.0",
-           "gulp-rename": "^1.2.2",
-           "gulp-sass": "^3.1.0",
-           "gulp-sourcemaps": "^2.6.1",
-           "gulp-uglify": "^3.0.0",
-           "node-sass": "^4.5.3",
-           "node-sass-glob-importer": "^5.0.0-alpha.13",
-           "object-assign": "^4.1.1",
-           "require-dir": "^0.3.2",
-           "rollup-plugin-babel": "^3.0.2",
-           "rollup-plugin-coffee-react": "^1.0.1",
-           "rollup-plugin-coffee-script": "^1.1.0",
-           "run-sequence": "^2.2.0"
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-plugin-external-helpers": "^6.22.0",
+        "babel-preset-latest": "^6.24.1",
+        "babel-preset-react": "^6.24.1",
+        "console-sync": "0.0.1",
+        "directory-tree": "^2.0.0",
+        "gulp": "^3.9.1",
+        "gulp-beautify": "^2.0.1",
+        "gulp-better-rollup": "^1.1.1",
+        "gulp-concat": "^2.6.1",
+        "gulp-load-plugins": "^1.5.0",
+        "gulp-parameterized": "^0.1.1",
+        "gulp-postcss": "^7.0.0",
+        "gulp-rename": "^1.2.2",
+        "gulp-sass": "^3.1.0",
+        "gulp-sourcemaps": "^2.6.1",
+        "gulp-uglify": "^3.0.0",
+        "node-sass": "^4.5.3",
+        "node-sass-glob-importer": "^5.0.0-alpha.13",
+        "object-assign": "^4.1.1",
+        "require-dir": "^0.3.2",
+        "rollup-plugin-babel": "^3.0.2",
+        "rollup-plugin-coffee-react": "^1.0.1",
+        "rollup-plugin-coffee-script": "^1.1.0",
+        "run-sequence": "^2.2.0",
+        "traverse": "^0.6.6"
 ```
 
 ### Install guide
@@ -126,7 +139,8 @@ gulp-config.json will NEVER update automatically through github (or any other, u
         "distFolderPath": "example/dist",
         "srcFolderPath": "example/src",
         "specialInputPathJS": "_additionalFiles",
-        "specialInputPathSass": "_additionalFiles"
+        "specialInputPathSass": "_additionalFiles",
+        "splitObjectDir": "splitObjects"
     },
     "settingsFileNames": {
         "srcFileSass": "layout",
@@ -148,6 +162,7 @@ gulp-config.json will NEVER update automatically through github (or any other, u
     * srcFolderPath - folder for all the source files
     * specialInputPathJS - folder for all separate JS files you wish to add (script that dont fit in the main js object or libraries)
     * specialInputPathSass - folder for all separate JS files you dont wish to clump up with the main Rollup object output
+    * splitObjectDir - folder where "splitObject" task dumps all generated files and directories
     
 * settingsFileNames
     * srcFileSass - the name of the main source sass file
@@ -163,6 +178,8 @@ importsBundle.js is regenerated every time the builder is run, so no need to upd
 
 This feature can be turned off in case you wish to create the file manually instead. Both manual and automated files are exclusive, dont override each other and can co-exist next to each other (only one gets generated at a time based on the settings tho).
 
+If you chose to use the "splitObject" function, then the generated file and folder structure will be immediately useable for bundling. You just need to copy the files where you need them manually.
+
 * Example file structure
 ```
 /example
@@ -176,7 +193,7 @@ This feature can be turned off in case you wish to create the file manually inst
                 exampleModule.js
                 exampleModule2.coffee
                 /test/
-                    exampleModule3.js            
+                    exampleModule1.js            
             /specialInput/
                 test.js
 ```
@@ -185,7 +202,7 @@ This feature can be turned off in case you wish to create the file manually inst
     import exampleComponent from './components/exampleComponent.jsx';
     import exampleModule from './modules/exampleModule.js';
     import exampleModule2 from './modules/exampleModule2.coffee';
-    import exampleModule3 from './modules/test/exampleModule3.js';
+    import exampleModule3 from './modules/test/exampleModule1.js';
     var exportObject = {
         components: {
             exampleComponent: exampleComponent,
@@ -201,7 +218,22 @@ This feature can be turned off in case you wish to create the file manually inst
     export default exportObject;
 ```
 
+## Manual tasks
+
 ## Version history
+
+1.1.5 (Oct. 7. 2017 / 7. 10. 2017)
+```
+Added features
+    Object splitting into webApp supported file/folder format
+    Support for parameters in gulp tasks from cli interface
+Changes
+    Removed a few dev forgotten console logs from testing before
+    Added "traverse" npm plugin for object management
+    Added "gulp-parameterized" for parameters in tasks
+```
+
+
 
 1.1.4 (Oct. 6. 2017 / 6. 10. 2017)
 ```

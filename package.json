@@ -1,6 +1,6 @@
 {
   "name": "webApp",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "globalDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.5.0",
@@ -23,6 +23,7 @@
     "gulp-better-rollup": "^1.1.1",
     "gulp-concat": "^2.6.1",
     "gulp-load-plugins": "^1.5.0",
+    "gulp-parameterized": "^0.1.1",
     "gulp-postcss": "^7.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
@@ -35,7 +36,8 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-coffee-react": "^1.0.1",
     "rollup-plugin-coffee-script": "^1.1.0",
-    "run-sequence": "^2.2.0"
+    "run-sequence": "^2.2.0",
+    "traverse": "^0.6.6"
   },
   "dependencies": {
     "sharp": "^0.18.4"

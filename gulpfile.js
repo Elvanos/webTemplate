@@ -28,6 +28,7 @@
             plugins.fs                     = require('fs');
             plugins.path                   = require('path');
             plugins.dirTree                = require('directory-tree');
+            plugins.traverse               = require('traverse');
 
         // Rollup + plugins
             plugins.rollup                 = require('gulp-better-rollup');
@@ -41,7 +42,7 @@
             let warningMessage             = setupOutput[1];
 
 
-        console.log(plugins);
+        //console.log(plugins);
 
 /* ---------- COMPILERS ------------- */
 
@@ -222,17 +223,99 @@
 /* ---------- MANUAL TASKS ------------- */
 
     // Run compilers
-    gulp.task('forceCompile', function(callback) {
+
+    gulp.task('forceCompile',function(callback){
         plugins.runSequence(
             [
                 'bundle-compilers-js',
                 'bundle-compilers-sass'
             ],
             callback);
+        }
+    );
 
-    });
+    // Split object
+    gulp.task('splitObject',
+        plugins.parameterized(
+            function (cb, params) {
 
-/* ---------- FINAL REPORT ------------- */
+                if (params.fileName === undefined) {
+                    console.warn('Missing an argument "fileName". Please retry with the argument filled in to your desired file.');
+                    return cb();
+                }
+
+                // Set basic path/name vars
+                    let splitObjectsDir = projectSettings.settingsPaths.splitObjectDir;
+
+                    // Check if the folder even exists, if not, make one
+                    if (!plugins.fs.existsSync(splitObjectsDir)){
+                        plugins.fs.mkdirSync(splitObjectsDir);
+                    }
+
+                // Get input object from file and file name
+                    let fileName = params.fileName;
+                    let fileContent = plugins.fs.readFileSync('./' + fileName)
+
+                    // Check if object has right formatting
+                    if (fileContent.indexOf('module.exports') === -1) {
+                        console.warn('Your input file is missing the "module.exports" wrapper, please fix it.' +
+                        '\n\nYour file should look like this: ' +
+                        '\n  module.exports = function () {' +
+                        '\n     return {<content of your object>}'+
+                        '\n  };');
+
+                        return cb();
+                    }
+
+                    // If the input is properly formatted, load it properly
+                    fileContent = require('./' + fileName);
+                    fileContent = fileContent();
+
+                // Run through the object and generate file structure accordingly
+                    let baseObjDir = './'+splitObjectsDir+'/'+fileName;
+
+                    // Set directories
+                    plugins.traverse(fileContent).forEach(function (x) {
+
+                        // Set default directory based on input file name
+                        if(this.key === undefined){
+                            if (!plugins.fs.existsSync(baseObjDir)){
+                                plugins.fs.mkdirSync(baseObjDir);
+                            }
+                        }
+
+                        // If directory
+                        if (!this.isLeaf) {
+                            let objpath =  baseObjDir+'/'+this.path.join('/');
+
+                            if (!plugins.fs.existsSync(objpath)){
+                                plugins.fs.mkdirSync(objpath);
+                            }
+                        }
+
+                    });
+
+                    // Set files
+                    plugins.traverse(fileContent).forEach(function (x) {
+                        // If file
+                        if (this.isLeaf) {
+                            let objpath = baseObjDir+'/'+this.path.join('/')+'.js';
+
+                            // Turn the function into a node module
+                            let output = 'var '+this.key+' = '+x+'; export default '+this.key+';';
+                            plugins.fs.writeFileSync(objpath, output);
+                        }
+
+                    });
+                return cb();
+            }
+        )
+
+    );
+
+
+
+    /* ---------- FINAL REPORT ------------- */
 
     // Compiler bundle JS
     gulp.task('finalReport', function(callback) {

@@ -9,6 +9,7 @@
   "settingsPaths": {
     "distFolderPath": "example/dist",
     "srcFolderPath": "example/src",
+    "splitObjectDir": "splitObjects",
     "specialInputPathJS": "_additionalFiles",
     "specialInputPathSass": "_additionalFiles"
   },

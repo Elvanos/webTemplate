@@ -98,6 +98,14 @@ module.exports = function startupCheck(plugins){
 
         // Sub-object settingsPaths
 
+
+            // Check "settingsPaths.splitObjectDir"
+            if (projectSettings.settingsPaths.splitObjectDir === undefined) {
+                rewriteConfig = true;
+                projectSettings.settingsPaths.splitObjectDir = defaultFileContent.settingsPaths.splitObjectDir;
+                warningMessage += 'MISSING SETTING:\nYour settings file was missing a "settingsPaths.splitObjectDir" property, one with a key "'+projectSettings.settingsPaths.splitObjectDir+'" has been automatically added to it.\nPlease update it to your needs.\n\n';
+            }
+
             // Check "settingsPaths.distFolderPath"
             if (projectSettings.settingsPaths.distFolderPath === undefined) {
                 rewriteConfig = true;
