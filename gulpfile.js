@@ -26,14 +26,12 @@
 
         // Node plugins
             plugins.fs                     = require('fs');
+            plugins.path                   = require('path');
             plugins.dirTree                = require('directory-tree');
 
         // Rollup + plugins
             plugins.rollup                 = require('gulp-better-rollup');
-            plugins.resolve                = require('rollup-plugin-node-resolve');
-            plugins.async                  = require('rollup-plugin-async');
             plugins.babel                  = require('rollup-plugin-babel');
-            plugins.commmonjs              = require('rollup-plugin-commonjs');
             plugins.coffeeReact            = require('rollup-plugin-coffee-react');
 
 
@@ -42,6 +40,8 @@
             let projectSettings            = setupOutput[0];
             let warningMessage             = setupOutput[1];
 
+
+        console.log(plugins);
 
 /* ---------- COMPILERS ------------- */
 
@@ -134,6 +134,12 @@
         (gulp, plugins, projectSettings)
     );
 
+    // Cleanup JS file after generation
+    gulp.task('utility-cleanupJS',
+        require('./gulpFiles/gulpTasks/utilities/utility-cleanupJS.js')
+        (gulp, plugins, projectSettings)
+    );
+
 
 
 /* ---------- TASK BUNDLES ------------- */
@@ -147,6 +153,7 @@
                 'compiler-rollup',
                 'compiler-specialInputJS',
                 'utility-uglify',
+                'utility-cleanupJS',
                 callback);
 
         }else{
@@ -154,6 +161,7 @@
 
                 'compiler-rollup',
                 'utility-uglify',
+                'utility-cleanupJS',
                 callback);
 
         }
@@ -244,6 +252,7 @@
     // Run different bundles
     gulp.task('default', function(callback) {
 
+
             if (projectSettings.settingsGeneration.compileOnLoad === "true"){
                 plugins.runSequence(
                     'forceCompile',
@@ -256,4 +265,5 @@
                     'finalReport',
                     callback);
             }
+
         });

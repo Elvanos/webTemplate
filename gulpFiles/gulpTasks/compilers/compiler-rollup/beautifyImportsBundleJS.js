@@ -2,7 +2,7 @@
 module.exports = function (gulp, plugins, projectSettings) {
     return function () {
 
-        let srcFolderPath = projectSettings.settingsPaths.srcFolderPath
+        let srcFolderPath = projectSettings.settingsPaths.srcFolderPath;
         let autogenBuildFile = projectSettings.settingsGeneration.autogenBuildFile;
 
         if (autogenBuildFile === "true") {

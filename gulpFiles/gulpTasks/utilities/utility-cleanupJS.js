@@ -3,18 +3,21 @@ module.exports = function (gulp, plugins, projectSettings) {
 
         let distFolderPath = projectSettings.settingsPaths.distFolderPath;
 
+
         return gulp
             .src(
                 [
                     distFolderPath + '/js/*.js',
-                    '!'+distFolderPath + '/js/*.min.js'
+                    '!' + distFolderPath + '/js/*.min.js'
                 ]
             )
             .pipe(plugins.uglify())
-            .pipe(plugins.rename({ extname: '.min.js' }))
+            .pipe(plugins.beautify
+                (
+                    {indent_size: 4}
+                )
+            )
             .pipe(gulp.dest(distFolderPath + '/js'));
-
-
 
 
     };

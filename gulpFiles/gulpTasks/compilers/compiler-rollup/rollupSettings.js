@@ -32,18 +32,18 @@ module.exports = function (gulp, plugins, projectSettings) {
                         console.warn(warning.message);
                     },
                     plugins: [
-                        plugins.async(),
-                        plugins.resolve({
+                        //plugins.async(),
+                        /*plugins.resolve({
                             main: true,
                             browser: true,
                             extensions: ['.js', '.coffee', '.csjx']
-                        }),
+                        }),*/
                         plugins.babel({
                             exclude: ['node_modules/!**'] // only transpile our source code
                         }),
-                        plugins.commmonjs({
+                        /*plugins.commmonjs({
                             extensions: ['.js', '.coffee', '.cjsx']
-                        }),
+                        }),*/
                         plugins.coffeeReact({
                             exclude: 'node_modules/!**'
                         })
