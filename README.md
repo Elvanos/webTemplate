@@ -9,9 +9,11 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 2. [Getting Started](#getting-started)
     1. [Prerequisites](#prerequisites)
     2. [Install guide](#install-guide)
-    3. [Setting gulp-config.json](#setting-gulp-config.json)
+    3. [Setting gulp-config.json](#setting-gulp-configjson)
     4. [How the automated object literal builder works](#how-the-automated-object-literal-builder-works)
 3. [Manual Tasks](#manual-tasks)
+    1.[forceCompile](#forcecompile)
+    2.[splitObject](#splitobject)
 4. [Version history](#version-history)
 
 ## Support & Features
@@ -219,6 +221,25 @@ If you chose to use the "splitObject" function, then the generated file and fold
 ```
 
 ## Manual tasks
+webApp comes with a bunch of pre-built manual tasks that you can use at any point through the cli interface. All of these commands share the following structure (assuming you are already in the working directory gulpfile.js)
+```
+gulp <task name> <parameters, if task has any>
+```
+#### forceCompile
+Manually runs all compilers you have enabled and regenerates all generated files on demand
+* parameters: none
+* example:
+```
+gulp forceCompile
+```
+#### splitObject 
+Splits a java script object into smaller parts and created an adequate file and folder structure that can be later used by the automatic or manual file builder 
+* parameters:
+    * fileName - name of the file you wish to take apart (can also include a path to it)
+* example:
+```
+gulp splitObject --fileName bigJsObject.js
+```
 
 ## Version history
 
