@@ -12,8 +12,8 @@ A template project for a new webpage/webapp that aims to provide out of the box 
     3. [Setting gulp-config.json](#setting-gulp-configjson)
     4. [How the automated object literal builder works](#how-the-automated-object-literal-builder-works)
 3. [Manual Tasks](#manual-tasks)
-    1.[forceCompile](#forcecompile)
-    2.[splitObject](#splitobject)
+    1. [forceCompile](#forcecompile)
+    2. [splitObject](#splitobject)
 4. [Version history](#version-history)
 
 ## Support & Features
