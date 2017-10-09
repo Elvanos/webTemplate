@@ -62,6 +62,7 @@ typings/
 
 # lock files
 package-lock.json
+yarn.lock
 
 # local settings file
 gulpFiles/gulp-config.json

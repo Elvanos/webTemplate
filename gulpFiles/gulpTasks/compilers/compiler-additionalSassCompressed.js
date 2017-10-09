@@ -1,32 +1,59 @@
-// Compiler Sass (compressed)
+// Compiler Additional Sass (compressed)
 module.exports = function (gulp, plugins, projectSettings) {
+
+    let taskName = 'compiler-additionalSassCompressed';
+
+
     return function () {
-        
         let srcFolderPath = projectSettings.settingsPaths.srcFolderPath;
         let distFolderPath = projectSettings.settingsPaths.distFolderPath;
         let specialInputPathSass = projectSettings.settingsPaths.specialInputPathSass;
 
-
-        
-        gulp.task('compiler-additionalSassCompressed', () =>
-            gulp.src(
+        return gulp
+            .src(
                 [
-                srcFolderPath +'/sass/' + specialInputPathSass + '/*.sass',
-                srcFolderPath +'/sass/' + specialInputPathSass + '/*.scss',
-                '!'+srcFolderPath +'/sass/' + specialInputPathSass + '/ignore/*.sass',
-                '!'+srcFolderPath +'/sass/' + specialInputPathSass + '/ignore/*.scss'
+                    srcFolderPath + '/sass/' + specialInputPathSass + '/*.sass',
+                    srcFolderPath + '/sass/' + specialInputPathSass + '/*.scss',
+                    '!' + srcFolderPath + '/sass/' + specialInputPathSass + '/ignore/*.sass',
+                    '!' + srcFolderPath + '/sass/' + specialInputPathSass + '/ignore/*.scss'
                 ]
             )
-                .pipe(plugins.plumberNotifier())
-                .pipe(plugins.sass({
-                        outputStyle: 'compressed',
-                        importer: plugins.globImporter()
-                    }
+            .pipe(plugins.plumberNotifier())
+            .pipe(plugins.sass(
+                {
+                    outputStyle: 'compressed',
+                    importer: plugins.globImporter()
+                }
                 )
-                    .on('error', plugins.sass.logError))
-                .pipe(plugins.postcss([plugins.autoprefixer()]))
-                .pipe(plugins.rename({suffix: '.min'}))
-                .pipe(gulp.dest(distFolderPath + '/css/'))
-        );
-    };
+            )
+            .pipe(plugins.postcss([plugins.autoprefixer()]))
+            .pipe(plugins.rename({
+                    extname: '.min.css'
+                })
+            )
+            .pipe(gulp.dest(distFolderPath + '/css/'))
+            .pipe(plugins.tap(
+                function (file) {
+
+                    file = plugins.path.basename(file.path)
+
+                    plugins.notifier.notify(
+                        {
+                            title: projectSettings.name + ' - ' + taskName,
+                            message: file + ' file successfully compiled!',
+                            sound: false
+                        });
+
+                    console.log(
+                        (
+                            'Task: ' + taskName + '\n' +
+                            'Message: ' + file + ' file successfully compiled!'+'\n'
+                        )
+                            .green
+                    );
+                }
+            ))
+
+    }
+
 };

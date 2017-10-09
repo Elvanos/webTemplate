@@ -1,6 +1,6 @@
 var exampleModule = () => {
 
- $('#message').html('test');
+ $('#message').html('test'); 
 
 };
 

@@ -1,12 +1,14 @@
 module.exports = function (gulp, plugins, projectSettings) {
 
+    let taskName = 'compiler-rollup/rollupSettings';
+
     let sourceFile;
 
     let autogenBuildFile = projectSettings.settingsGeneration.autogenBuildFile;
     let srcFolderPath = projectSettings.settingsPaths.srcFolderPath;
     let name = projectSettings.name;
     let distFileJs = projectSettings.settingsFileNames.distFileJs;
-    let distFolderPawth = projectSettings.settingsPaths.distFolderPath;
+    let distFolderPath = projectSettings.settingsPaths.distFolderPath;
 
     if (autogenBuildFile === "true") {
         sourceFile = 'importsBundle.js';
@@ -20,7 +22,7 @@ module.exports = function (gulp, plugins, projectSettings) {
             .pipe(plugins.rollup(
                 {
                     moduleName: name,
-                    //cache: true,
+                    cache: true,
                     onwarn: function (warning) {
                         // Skip certain warnings
 
@@ -33,18 +35,9 @@ module.exports = function (gulp, plugins, projectSettings) {
                         console.warn(warning.message);
                     },
                     plugins: [
-                        //plugins.async(),
-                        /*plugins.resolve({
-                            main: true,
-                            browser: true,
-                            extensions: ['.js', '.coffee', '.csjx']
-                        }),*/
                         plugins.babel({
-                            exclude: ['node_modules/!**'] // only transpile our source code
+                            exclude: ['node_modules/!**']
                         }),
-                        /*plugins.commmonjs({
-                            extensions: ['.js', '.coffee', '.cjsx']
-                        }),*/
                         plugins.coffeeReact({
                             exclude: 'node_modules/!**'
                         })
@@ -54,15 +47,26 @@ module.exports = function (gulp, plugins, projectSettings) {
                 )
             )
             .pipe(plugins.rename(distFileJs + ".js"))
-            .pipe(plugins.gulpNotify(
-                {
-                    title: projectSettings.name + ' - ' + this.currentTask.name,
-                    message: distFileJs + '.js successfully compiled!',
-                    sound: false
+            .pipe(gulp.dest(distFolderPath + '/js'))
+            .pipe(plugins.tap(
+                function (file) {
+
+                    plugins.notifier.notify(
+                        {
+                            title: projectSettings.name + ' - ' + taskName,
+                            message: distFileJs + '.js file successfully compiled!',
+                            sound: false
+                        });
+
+                    console.log(
+                        (
+                            'Task: ' + taskName + '\n' +
+                            'Message: ' + distFileJs + '.js file successfully compiled!'+'\n'
+                        )
+                            .green
+                    );
                 }
-                )
-            )
-            .pipe(gulp.dest(distFolderPawth + '/js'))
+            ))
     };
 }
 ;

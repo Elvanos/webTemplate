@@ -26,6 +26,7 @@
     "gulp-beautify": "^2.0.1",
     "gulp-better-rollup": "^1.1.1",
     "gulp-concat": "^2.6.1",
+    "gulp-filter": "^5.0.1",
     "gulp-load-plugins": "^1.5.0",
     "gulp-notify": "^3.0.0",
     "gulp-parameterized": "^0.1.1",
@@ -35,7 +36,9 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.6.1",
+    "gulp-tap": "^1.0.1",
     "gulp-uglify": "^3.0.0",
+    "gulp-watch": "^4.3.11",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.5.3",
     "node-sass-glob-importer": "^5.0.0-alpha.13",
@@ -48,6 +51,7 @@
     "traverse": "^0.6.6"
   },
   "dependencies": {
+    "colors": "^1.1.2",
     "sharp": "^0.18.4"
   }
 }

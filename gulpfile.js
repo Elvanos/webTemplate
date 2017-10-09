@@ -17,17 +17,6 @@
         });
     }
 
-    // Custom gulp task name getter
-    function gulpTaskNamefixer (){
-        gulp.Gulp.prototype.__runTask = gulp.Gulp.prototype._runTask;
-        gulp.Gulp.prototype._runTask = function(task) {
-            this.currentTask = task;
-            this.__runTask(task);
-        }
-    }
-
-
-
         // Gulp + plugins
             let gulp                       = require('gulp');
             let plugins                    = require('gulp-load-plugins')();
@@ -42,6 +31,7 @@
             plugins.dirTree                = require('directory-tree');
             plugins.traverse               = require('traverse');
             plugins.notifier               = require('node-notifier');
+            plugins.colors                 = require('colors');
 
         // Rollup + plugins
             plugins.rollup                 = require('gulp-better-rollup');
@@ -55,8 +45,6 @@
             let warningMessage             = setupOutput[1];
 
 
-        // Fix gulp task names
-        gulpTaskNamefixer();
 
         //console.log(plugins);
 
@@ -135,12 +123,12 @@
     // SASS
     gulp.task('watcher-sass',
         require('./gulpFiles/gulpTasks/watchers/watcher-sass.js')
-        (gulp, plugins, projectSettings, ['compiler-sassCompressed', 'compiler-sassDevelopment'])
+        (gulp, plugins, projectSettings, ['bundle-compilers-sass'])
     );
 
     gulp.task('watcher-additionalSass',
         require('./gulpFiles/gulpTasks/watchers/watcher-additionalSass.js')
-        (gulp, plugins, projectSettings, ['compiler-additionalSassCompressed', 'compiler-additionalSassDevelopment'])
+        (gulp, plugins, projectSettings, ['bundle-compilers-sass'])
     );
 
 
@@ -200,6 +188,7 @@
 
         }else{
 
+
             plugins.runSequence(
                 [
                     'compiler-sassCompressed',
@@ -218,8 +207,8 @@
             plugins.runSequence(
                 [
                     'watcher-javaScript',
-                    'watcher-sass',
-                    'watcher-additionalSass'
+                    //'watcher-sass',
+                    //'watcher-additionalSass'
                 ],
                 callback);
 
@@ -228,7 +217,7 @@
             plugins.runSequence(
                 [
                     'watcher-javaScript',
-                    'watcher-sass'
+                    //'watcher-sass'
                 ],
                 callback);
         }
@@ -241,12 +230,14 @@
     // Run compilers
 
     gulp.task('forceCompile',function(callback){
+
         plugins.runSequence(
             [
                 'bundle-compilers-js',
                 'bundle-compilers-sass'
             ],
             callback);
+
         }
     );
 
@@ -336,23 +327,42 @@
     // Compiler bundle JS
     gulp.task('finalReport', function(callback) {
 
+            let taskName = 'finalReport';
+
             if (warningMessage.length > 0) {
+
                 plugins.notifier.notify(
                     {
-                        title: projectSettings.name+' - '+this.currentTask.name,
+                        title: projectSettings.name + ' - ' + taskName,
                         message: warningMessage,
-                        wait: true
-                    }
+                        sound: false
+                    });
+
+                console.log(
+                    (
+                        'Task: ' + taskName + '\n' +
+                        'Message: ' + warningMessage + '\n'
+                    )
+                        .green
                 );
-                console.log(warningMessage);
+
                 callback();
             }else{
                 warningMessage = "Innitial run succesfull.\nEverything works as intended.\nHappy coding!";
+
                 plugins.notifier.notify(
                     {
-                        title: projectSettings.name+' - '+this.currentTask.name,
-                        message: warningMessage
-                    }
+                        title: projectSettings.name + ' - ' + taskName,
+                        message: warningMessage,
+                        sound: false
+                    });
+
+                console.log(
+                    (
+                        'Task: ' + taskName + '\n' +
+                        'Message: ' + warningMessage + '\n'
+                    )
+                        .green
                 );
                 callback();
             }
@@ -367,12 +377,12 @@
             if (projectSettings.settingsGeneration.compileOnLoad === "true"){
                 plugins.runSequence(
                     'forceCompile',
-                    'bundle-watchers',
+                    //'bundle-watchers',
                     'finalReport',
                     callback);
             }else {
                 plugins.runSequence(
-                    'bundle-watchers',
+                    //'bundle-watchers',
                     'finalReport',
                     callback);
             }
