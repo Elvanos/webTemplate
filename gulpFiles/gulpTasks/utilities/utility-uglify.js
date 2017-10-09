@@ -10,6 +10,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                     '!'+distFolderPath + '/js/*.min.js'
                 ]
             )
+            .pipe(plugins.plumberNotifier())
             .pipe(plugins.uglify())
             .pipe(plugins.rename({ extname: '.min.js' }))
             .pipe(gulp.dest(distFolderPath + '/js'));

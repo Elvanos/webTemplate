@@ -15,7 +15,8 @@ module.exports = function (gulp, plugins, projectSettings) {
     }
 
     return function () {
-        return gulp.src(srcFolderPath + '/js/'+sourceFile)
+        return gulp.src(srcFolderPath + '/js/' + sourceFile)
+            .pipe(plugins.plumberNotifier())
             .pipe(plugins.rollup(
                 {
                     moduleName: name,
@@ -53,6 +54,14 @@ module.exports = function (gulp, plugins, projectSettings) {
                 )
             )
             .pipe(plugins.rename(distFileJs + ".js"))
+            .pipe(plugins.gulpNotify(
+                {
+                    title: projectSettings.name + ' - ' + this.currentTask.name,
+                    message: distFileJs + '.js successfully compiled!',
+                    sound: false
+                }
+                )
+            )
             .pipe(gulp.dest(distFolderPawth + '/js'))
     };
 }

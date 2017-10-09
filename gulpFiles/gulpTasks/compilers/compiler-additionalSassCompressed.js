@@ -17,6 +17,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                 '!'+srcFolderPath +'/sass/' + specialInputPathSass + '/ignore/*.scss'
                 ]
             )
+                .pipe(plugins.plumberNotifier())
                 .pipe(plugins.sass({
                         outputStyle: 'compressed',
                         importer: plugins.globImporter()

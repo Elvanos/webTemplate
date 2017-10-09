@@ -7,6 +7,7 @@ module.exports = function (gulp, plugins, projectSettings) {
 
         if (autogenBuildFile === "true") {
         return gulp.src(srcFolderPath + '/js/importsBundle.js')
+            .pipe(plugins.plumberNotifier())
             .pipe(plugins.beautify
                 (
                     {indent_size: 4}

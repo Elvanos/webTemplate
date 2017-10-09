@@ -17,18 +17,31 @@
         });
     }
 
+    // Custom gulp task name getter
+    function gulpTaskNamefixer (){
+        gulp.Gulp.prototype.__runTask = gulp.Gulp.prototype._runTask;
+        gulp.Gulp.prototype._runTask = function(task) {
+            this.currentTask = task;
+            this.__runTask(task);
+        }
+    }
+
+
+
         // Gulp + plugins
             let gulp                       = require('gulp');
             let plugins                    = require('gulp-load-plugins')();
             plugins.autoprefixer           = require('autoprefixer');
             plugins.runSequence            = require('run-sequence');
             plugins.globImporter           = require('node-sass-glob-importer');
+            plugins.gulpNotify             = require("gulp-notify");
 
         // Node plugins
             plugins.fs                     = require('fs');
             plugins.path                   = require('path');
             plugins.dirTree                = require('directory-tree');
             plugins.traverse               = require('traverse');
+            plugins.notifier               = require('node-notifier');
 
         // Rollup + plugins
             plugins.rollup                 = require('gulp-better-rollup');
@@ -41,6 +54,9 @@
             let projectSettings            = setupOutput[0];
             let warningMessage             = setupOutput[1];
 
+
+        // Fix gulp task names
+        gulpTaskNamefixer();
 
         //console.log(plugins);
 
@@ -321,11 +337,23 @@
     gulp.task('finalReport', function(callback) {
 
             if (warningMessage.length > 0) {
-                console.warn(warningMessage);
+                plugins.notifier.notify(
+                    {
+                        title: projectSettings.name+' - '+this.currentTask.name,
+                        message: warningMessage,
+                        wait: true
+                    }
+                );
+                console.log(warningMessage);
                 callback();
             }else{
                 warningMessage = "Innitial run succesfull.\nEverything works as intended.\nHappy coding!";
-                console.log(warningMessage);
+                plugins.notifier.notify(
+                    {
+                        title: projectSettings.name+' - '+this.currentTask.name,
+                        message: warningMessage
+                    }
+                );
                 callback();
             }
     });

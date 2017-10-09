@@ -9,6 +9,7 @@ module.exports = function (gulp, plugins, projectSettings) {
         
         gulp.task('compiler-sassDevelopment', () =>
             gulp.src(srcFolderPath + '/sass/' + srcFileSass + '.sass')
+                .pipe(plugins.plumberNotifier())
                 .pipe(plugins.sass(
                     {
                         importer: plugins.globImporter()
@@ -22,6 +23,14 @@ module.exports = function (gulp, plugins, projectSettings) {
                     includeContent: false,
                     sourceRoot: srcFolderPath + '/sass/' + srcFileSass+ '.sass'
                 }))
+                .pipe(plugins.gulpNotify(
+                    {
+                        title: projectSettings.name + ' - ' + this.currentTask.name,
+                        message: distFileCss+'.sass file successfully compiled!',
+                        sound: false
+                    }
+                    )
+                )
                 .pipe(gulp.dest(distFolderPath + '/css/'))
         );
     };

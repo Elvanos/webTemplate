@@ -11,6 +11,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                     '!' + distFolderPath + '/js/*.min.js'
                 ]
             )
+            .pipe(plugins.plumberNotifier())
             .pipe(plugins.uglify())
             .pipe(plugins.beautify
                 (

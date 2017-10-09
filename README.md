@@ -1,6 +1,6 @@
 # webTemplate project
 
-- Version 1.1.5
+- Version 1.1.6
 
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
@@ -21,6 +21,7 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 * Automatically generated settings file for easy start
 * Supports both manual and automated modes for bundling JS files
 * Automatic checking and fixing of old/partial config files
+* Custom gulp reporting via OS native notification (WIP)
 * Deconstruction of any big input object into individual files ready to be bungled again 
     
 * Gulp task runner
@@ -77,11 +78,14 @@ node.js 6.11.3 (or higher)
         "gulp-concat": "^2.6.1",
         "gulp-load-plugins": "^1.5.0",
         "gulp-parameterized": "^0.1.1",
+        "gulp-plumber": "^1.1.0",
+        "gulp-plumber-notifier": "0.0.3",
         "gulp-postcss": "^7.0.0",
         "gulp-rename": "^1.2.2",
         "gulp-sass": "^3.1.0",
         "gulp-sourcemaps": "^2.6.1",
         "gulp-uglify": "^3.0.0",
+        "node-notifier": "^5.1.2",
         "node-sass": "^4.5.3",
         "node-sass-glob-importer": "^5.0.0-alpha.13",
         "object-assign": "^4.1.1",
@@ -243,6 +247,20 @@ gulp splitObject --fileName bigJsObject.js
 
 ## Version history
 
+1.1.6 (Oct. 9. 2017 / 9. 10. 2017)
+```
+Added features
+    Added support for handling Gulp error in order to not crash the watcher/compiler tasks
+    Addec notification popups for taks and custom function
+    Added gulp task name getter function
+Changes
+    Added notify and error popups to all needed tasks
+    Added "gulp-plumber"
+    Added "gulp-plumber-notifier"   
+    Added "gulp-notify"
+    Added "node-notifier"
+```
+
 1.1.5 (Oct. 7. 2017 / 7. 10. 2017)
 ```
 Added features
@@ -253,8 +271,6 @@ Changes
     Added "traverse" npm plugin for object management
     Added "gulp-parameterized" for parameters in tasks
 ```
-
-
 
 1.1.4 (Oct. 6. 2017 / 6. 10. 2017)
 ```

@@ -15,6 +15,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                     '!'+srcFolderPath +'/sass/' + specialInputPathSass + '/ignore/*.scss'
                 ]
                 )
+                .pipe(plugins.plumberNotifier())
                 .pipe(plugins.sass(
                     {
                         importer: plugins.globImporter()
@@ -23,6 +24,14 @@ module.exports = function (gulp, plugins, projectSettings) {
                     .on('error', plugins.sass.logError))
                 .pipe(plugins.sourcemaps.init())
                 .pipe(plugins.postcss([plugins.autoprefixer()]))
+                .pipe(plugins.gulpNotify(
+                    {
+                        title: projectSettings.name + ' - ' + this.currentTask.name,
+                        message: 'Additional sass files successfully compiled!',
+                        sound: false
+                    }
+                    )
+                )
                 .pipe(gulp.dest(distFolderPath + '/css/'))
         );
     };

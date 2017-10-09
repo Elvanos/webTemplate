@@ -9,6 +9,7 @@ module.exports = function (gulp, plugins, projectSettings) {
         
         gulp.task('compiler-sassCompressed', () =>
             gulp.src(srcFolderPath + '/sass/' + srcFileSass + '.sass')
+                .pipe(plugins.plumberNotifier())
                 .pipe(plugins.sass({
                         outputStyle: 'compressed',
                         importer: plugins.globImporter()

@@ -12,6 +12,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                         distFolderPath + '/js/' + distFileJs+ '.js'
                     ]
                 )
+                .pipe(plugins.plumberNotifier())
                 .pipe(plugins.concat(distFileJs + '.concat.js'))
                 .pipe(gulp.dest(distFolderPath + '/js'));
 
