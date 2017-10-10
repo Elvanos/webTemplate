@@ -69,6 +69,30 @@ module.exports = function (gulp, plugins, projectSettings) {
                             // Build import list
                             let importPath = treeLevel[i].path;
 
+                            // Check if all files are formatted properly, if not, wrap them properly so we dont end up generating errors
+                            let fileContents = plugins.fs.readFileSync(importPath, 'utf8');
+                            if(fileContents.indexOf('export default') === -1) {
+
+                                let prefix = '';
+                                let suffix = '';
+
+                                // React to different file types
+                                    if (treeLevel[i].extension === '.js' || treeLevel[i].extension === '.jsx') {
+                                        prefix ='let '+fileName+' = function () {\n\n';
+                                        suffix = '};\nexport default ' +fileName+';';
+                                    }
+    
+                                    if (treeLevel[i].extension === '.coffee') {
+                                        prefix = fileName + ' = () ->\n\n';
+                                        suffix = 'export default ' + fileName
+                                    }
+
+                                fileContents = prefix + fileContents + suffix;
+                                plugins.fs.writeFileSync(importPath, fileContents, 'utf8');
+                            }
+
+
+
                             // Fix backslashes
                             importPath = importPath.replace(/\\/g, "/");
 
@@ -84,10 +108,7 @@ module.exports = function (gulp, plugins, projectSettings) {
 
                 treeSearch(fileTree);
 
-
-                let fileContent = importsString + objectHeader + objectBody + objectFooter;
-
-                return fileContent;
+                return importsString + objectHeader + objectBody + objectFooter;
             }
             let fileContent = buildMainJS();
             return plugins.fs.writeFileSync('./' + srcFolderPath + '/js/importsBundle.js', fileContent);

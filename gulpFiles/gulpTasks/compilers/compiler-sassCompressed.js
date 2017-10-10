@@ -10,6 +10,8 @@ module.exports = function (gulp, plugins, projectSettings) {
         let distFileCss = projectSettings.settingsFileNames.distFileCss;
         let distFolderPath = projectSettings.settingsPaths.distFolderPath;
 
+        let notSettings = projectSettings.settingsNotification.sassCompilerCompressed;
+
 
         return gulp
             .src(srcFolderPath + '/sass/' + srcFileSass + '.sass')
@@ -25,20 +27,29 @@ module.exports = function (gulp, plugins, projectSettings) {
             .pipe(plugins.tap(
                 function (file) {
 
-                    plugins.notifier.notify(
-                        {
-                            title: projectSettings.name + ' - ' + taskName,
-                            message: distFileCss + '.min.css file successfully compiled!',
-                            sound: false
-                        });
+                    // Check notification settings
+                    if (notSettings === 'both' || notSettings === 'notification') {
 
-                    console.log(
-                        (
-                            'Task: ' + taskName + '\n' +
-                            'Message: ' + distFileCss + '.min.css file successfully compiled!'+'\n'
-                        )
-                            .green
-                    );
+                        plugins.notifier.notify(
+                            {
+                                title: projectSettings.name + ' - ' + taskName,
+                                message: distFileCss + '.min.css file successfully compiled!',
+                                sound: false
+                            });
+
+                    }
+
+                    if(notSettings === 'both' || notSettings === 'console'){
+
+                        console.log(
+                            (
+                                'Task: ' + taskName + '\n' +
+                                'Message: ' + distFileCss + '.min.css file successfully compiled!'+'\n'
+                            )
+                                .green
+                        );
+
+                    }
                 }
             ))
 

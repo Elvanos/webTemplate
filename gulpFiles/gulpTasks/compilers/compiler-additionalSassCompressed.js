@@ -9,6 +9,8 @@ module.exports = function (gulp, plugins, projectSettings) {
         let distFolderPath = projectSettings.settingsPaths.distFolderPath;
         let specialInputPathSass = projectSettings.settingsPaths.specialInputPathSass;
 
+        let notSettings = projectSettings.settingsNotification.sassCompilerCompressedAdditional;
+
         return gulp
             .src(
                 [
@@ -37,20 +39,29 @@ module.exports = function (gulp, plugins, projectSettings) {
 
                     file = plugins.path.basename(file.path)
 
-                    plugins.notifier.notify(
-                        {
-                            title: projectSettings.name + ' - ' + taskName,
-                            message: file + ' file successfully compiled!',
-                            sound: false
-                        });
+                    // Check notification settings
+                    if (notSettings === 'both' || notSettings === 'notification') {
 
-                    console.log(
-                        (
-                            'Task: ' + taskName + '\n' +
-                            'Message: ' + file + ' file successfully compiled!'+'\n'
-                        )
-                            .green
-                    );
+                        plugins.notifier.notify(
+                            {
+                                title: projectSettings.name + ' - ' + taskName,
+                                message: file + ' file successfully compiled!',
+                                sound: false
+                            });
+
+                    }
+
+                    if(notSettings === 'both' || notSettings === 'console'){
+
+                        console.log(
+                            (
+                                'Task: ' + taskName + '\n' +
+                                'Message: ' + file + ' file successfully compiled!'+'\n'
+                            )
+                                .green
+                        );
+
+                    }
                 }
             ))
 

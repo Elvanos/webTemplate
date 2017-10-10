@@ -10,12 +10,14 @@ module.exports = function (gulp, plugins, projectSettings) {
         let distFileCss = projectSettings.settingsFileNames.distFileCss;
         let distFolderPath = projectSettings.settingsPaths.distFolderPath;
 
+        let notSettings = projectSettings.settingsNotification.sassCompilerDevelopment;
 
         return gulp
             .src(srcFolderPath + '/sass/' + srcFileSass + '.sass')
             .pipe(plugins.plumberNotifier())
             .pipe(plugins.sass(
                 {
+                    outputStyle: 'nested',
                     importer: plugins.globImporter()
                 }
             ))
@@ -29,23 +31,38 @@ module.exports = function (gulp, plugins, projectSettings) {
             .pipe(gulp.dest(distFolderPath + '/css/'))
             .pipe(plugins.tap(
                 function (file) {
+
                     let fileExtension = plugins.path.extname(file.path).substr(1);
 
                     if (fileExtension !== 'map') {
-                        plugins.notifier.notify(
-                            {
-                                title: projectSettings.name + ' - ' + taskName,
-                                message: distFileCss + ' file successfully compiled!',
-                                sound: false
-                            }
-                        );
-                        console.log(
-                            (
-                                'Task: ' + taskName + '\n' +
-                                'Message: ' + distFileCss + ' file successfully compiled!'+'\n'
-                            )
-                                .green
-                        );
+
+                        // Check notification settings
+                        if (notSettings === 'both' || notSettings === 'notification') {
+
+                            plugins.notifier.notify(
+                                {
+                                    title: projectSettings.name + ' - ' + taskName,
+                                    message: distFileCss + '.css file successfully compiled!',
+                                    sound: false
+                                }
+                            );
+
+                        }
+                        if(notSettings === 'both' || notSettings === 'console'){
+
+                            console.log(
+                                (
+                                    'Task: ' + taskName + '\n' +
+                                    'Message: ' + distFileCss + '.css file successfully compiled!'+'\n'
+                                )
+                                    .green
+                            );
+
+                        }
+
+
+
+
                     }
                 }
             ))

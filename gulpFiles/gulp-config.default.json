@@ -17,5 +17,14 @@
     "srcFileSass": "layout",
     "distFileCss": "layout",
     "distFileJs": "layout"
+  },
+  "settingsNotification":{
+    "javascriptCompiler": "both",
+    "javascriptCompilerAdditional": "console",
+    "javascriptCompilerCompressed": "none",
+    "sassCompilerDevelopment": "both",
+    "sassCompilerCompressed": "none",
+    "sassCompilerDevelopmentAdditional": "both",
+    "sassCompilerCompressedAdditional": "none"
   }
 }

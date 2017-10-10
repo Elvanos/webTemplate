@@ -10,6 +10,8 @@ module.exports = function (gulp, plugins, projectSettings) {
     let distFileJs = projectSettings.settingsFileNames.distFileJs;
     let distFolderPath = projectSettings.settingsPaths.distFolderPath;
 
+    let notSettings = projectSettings.settingsNotification.javascriptCompiler;
+
     if (autogenBuildFile === "true") {
         sourceFile = 'importsBundle.js';
     } else {
@@ -19,6 +21,7 @@ module.exports = function (gulp, plugins, projectSettings) {
     return function () {
         return gulp.src(srcFolderPath + '/js/' + sourceFile)
             .pipe(plugins.plumberNotifier())
+            //.pipe(plugins.sourcemaps.init())
             .pipe(plugins.rollup(
                 {
                     moduleName: name,
@@ -47,6 +50,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                 )
             )
             .pipe(plugins.rename(distFileJs + ".js"))
+            //.pipe(plugins.sourcemaps.write(''))
             .pipe(gulp.dest(distFolderPath + '/js'))
             .pipe(plugins.tap(
                 function (file) {
@@ -61,7 +65,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                     console.log(
                         (
                             'Task: ' + taskName + '\n' +
-                            'Message: ' + distFileJs + '.js file successfully compiled!'+'\n'
+                            'Message: ' + distFileJs + '.js file successfully compiled!' + '\n'
                         )
                             .green
                     );

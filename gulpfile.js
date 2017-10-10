@@ -2,7 +2,10 @@
 
     // DEBUG
     let debugSwitch = false;
+
     if (debugSwitch === true) {
+
+        // Copnsole log source
         ['log', 'warn'].forEach(function(method) {
             let old = console[method];
             console[method] = function() {
@@ -15,6 +18,7 @@
                 return old.apply(console, args);
             };
         });
+
     }
 
         // Gulp + plugins
@@ -23,7 +27,6 @@
             plugins.autoprefixer           = require('autoprefixer');
             plugins.runSequence            = require('run-sequence');
             plugins.globImporter           = require('node-sass-glob-importer');
-            plugins.gulpNotify             = require("gulp-notify");
 
         // Node plugins
             plugins.fs                     = require('fs');
@@ -207,8 +210,8 @@
             plugins.runSequence(
                 [
                     'watcher-javaScript',
-                    //'watcher-sass',
-                    //'watcher-additionalSass'
+                    'watcher-sass',
+                    'watcher-additionalSass'
                 ],
                 callback);
 
@@ -217,7 +220,7 @@
             plugins.runSequence(
                 [
                     'watcher-javaScript',
-                    //'watcher-sass'
+                    'watcher-sass'
                 ],
                 callback);
         }
@@ -343,7 +346,7 @@
                         'Task: ' + taskName + '\n' +
                         'Message: ' + warningMessage + '\n'
                     )
-                        .green
+                        .red
                 );
 
                 callback();
@@ -377,12 +380,12 @@
             if (projectSettings.settingsGeneration.compileOnLoad === "true"){
                 plugins.runSequence(
                     'forceCompile',
-                    //'bundle-watchers',
+                    'bundle-watchers',
                     'finalReport',
                     callback);
             }else {
                 plugins.runSequence(
-                    //'bundle-watchers',
+                    'bundle-watchers',
                     'finalReport',
                     callback);
             }

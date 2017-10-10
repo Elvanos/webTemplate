@@ -9,6 +9,8 @@ module.exports = function (gulp, plugins, projectSettings) {
         let distFolderPath = projectSettings.settingsPaths.distFolderPath;
         let specialInputPathSass = projectSettings.settingsPaths.specialInputPathSass;
 
+        let notSettings = projectSettings.settingsNotification.sassCompilerDevelopmentAdditional;
+
         return gulp
             .src(
                 [
@@ -36,9 +38,13 @@ module.exports = function (gulp, plugins, projectSettings) {
             .pipe(plugins.tap(
                 function (file) {
 
-                        let fileExtension = plugins.path.extname(file.path).substr(1);
+                    let fileExtension = plugins.path.extname(file.path).substr(1);
 
-                        file = plugins.path.basename(file.path)
+                    file = plugins.path.basename(file.path)
+
+
+                    // Check notification settings
+                    if (notSettings === 'both' || notSettings === 'notification') {
 
                         if (fileExtension !== 'map') {
                             plugins.notifier.notify(
@@ -48,14 +54,23 @@ module.exports = function (gulp, plugins, projectSettings) {
                                     sound: false
                                 }
                             );
+
+                        }
+
+                        if (notSettings === 'both' || notSettings === 'console') {
+
                             console.log(
                                 (
                                     'Task: ' + taskName + '\n' +
-                                    'Message: ' + file + ' file successfully compiled!'+'\n'
+                                    'Message: ' + file + ' file successfully compiled!' + '\n'
                                 )
                                     .green
                             );
+
                         }
+
+
+                    }
 
                 }
             ))

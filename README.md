@@ -1,6 +1,6 @@
 # webTemplate project
 
-- Version 1.1.6
+- Version 1.1.7
 
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
@@ -20,8 +20,9 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 * Configurable structure of the directories along with file names
 * Automatically generated settings file for easy start
 * Supports both manual and automated modes for bundling JS files
+* Automatically added wrappers for new .js/.coffee/.jsx files for bundling
 * Automatic checking and fixing of old/partial config files
-* Custom gulp reporting via OS native notification (WIP)
+* Custom gulp reporting via OS native notification and console logs (WIP)
 * Deconstruction of any big input object into individual files ready to be bungled again 
     
 * Gulp task runner
@@ -31,14 +32,14 @@ A template project for a new webpage/webapp that aims to provide out of the box 
  
 * SASS preprocessor autobuild & watcher
     * LibSass 3.5 and node-sass
-    * Minified & dev version of the style file
+    * Minified & dev version of the style file along with sourcemaps
     * Support for additional .sass/.scss files outside of the main bundle if needed (along with minified version generated)
     * Supports glob sass importing for easier usage
     
 * Rollup JS autobuild tool & watcher
     * Supports compiling from JSX, ES6 and Coffeescript
         * Input can be mixed in any way as long each is it a separate file
-    * Support for additional JS files outside of the main bundle if needed (along with minified version generated)
+    * Support for additional JS files outside of the main bundle if needed (along with minified versions generated)
     * Automatic custom processing of directories and files
         * Supported modes: Object literal (more WIP)
         * Support infinite recursive subdirectories/files and comes up with a custom ID build system
@@ -53,9 +54,9 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 
 ```
 node.js 6.11.3 (or higher)
-    npm 5.4.1 (or higher)
+    yarn 1.1.0
     
-    Global NPM packages (install manually)
+    Global nodeJS packages
         "babel-cli": "^6.26.0",
         "babel-preset-react": "^6.5.0",
         "rollup": "^0.49.3",
@@ -63,13 +64,13 @@ node.js 6.11.3 (or higher)
         "react": "^15.6.1",
         "gulp": "^3.9.1"
         
-    Local NPM dev dependencies (install via "npm install")
+    Local nodeJS dev dependencies
         "autoprefixer": "^7.1.4",
         "babel-core": "^6.26.0",
-        "babel-loader": "^7.1.2",
         "babel-plugin-external-helpers": "^6.22.0",
         "babel-preset-latest": "^6.24.1",
         "babel-preset-react": "^6.24.1",
+        "colors": "^1.1.2",
         "console-sync": "0.0.1",
         "directory-tree": "^2.0.0",
         "gulp": "^3.9.1",
@@ -84,7 +85,9 @@ node.js 6.11.3 (or higher)
         "gulp-rename": "^1.2.2",
         "gulp-sass": "^3.1.0",
         "gulp-sourcemaps": "^2.6.1",
+        "gulp-tap": "^1.0.1",
         "gulp-uglify": "^3.0.0",
+        "gulp-watch": "^4.3.11",
         "node-notifier": "^5.1.2",
         "node-sass": "^4.5.3",
         "node-sass-glob-importer": "^5.0.0-alpha.13",
@@ -92,68 +95,85 @@ node.js 6.11.3 (or higher)
         "require-dir": "^0.3.2",
         "rollup-plugin-babel": "^3.0.2",
         "rollup-plugin-coffee-react": "^1.0.1",
-        "rollup-plugin-coffee-script": "^1.1.0",
         "run-sequence": "^2.2.0",
         "traverse": "^0.6.6"
 ```
 
 ### Install guide
 1. Download and install your appropriate version of node.js 
-    * [node.js download page](https://nodejs.org/en/download/) - this also automaticaly installs npm    
-2. Now install the actual webTemplate
+    * [node.js download page](https://nodejs.org/en/download/)
+2. Download and install Yarn
+    * [yarn download page](https://yarnpkg.com/en/)
+3. Now install the actual webTemplate
     * Option one: Clone this repository from github - https://github.com/Elvanos/webTemplate.git
     * Option two: Download it and unpack it    
     [webTemplate github page](https://github.com/Elvanos/webTemplate)
-3. Install the global NPM packages by following commands
+4. Install the global nodeJS packages by following commands
     ```
-    npm install -g babel-cli
-    npm install -g babel-preset-react
-    npm install -g rollup
-    npm install -g coffeescript
-    npm install -g react
-    npm install -g gulp    
+    yarn global add babel-cli
+    yarn global add babel-preset-react
+    yarn global add rollup
+    yarn global add coffeescript
+    yarn global add react
+    yarn global add gulp    
     ``` 
-4. Open your favorite terminal/cmd interface, navigate to your work folder
+5. Open your favorite terminal/cmd interface, navigate to your work folder
     * Type "npm install" and wait and wait the template finishes installing
         ```
-        npm install   
-        ```
+        yarn install
+        ```        
+        * If you are updating from older version, it is suggested to use this command instead         
+            ```
+                yarn install --force
+            ```     
     * Type "gulp" 
         ```
         gulp
         ```
         * You should get a message saying that a new "gulp-config.json" file has been created unless you had one before
-5. Set your gulp-config.json to your needs (can be found in "gulpFiles" directory)
-6. Done! Just make sure you run "gulp" command from your directory every time you start working on your project again (and feel free to explore all the option and manual commands)
+6. Set your gulp-config.json to your needs (can be found in "gulpFiles" directory, if you do not have one, go to next step and then look for it again)
+7. Done! Just make sure you run "gulp" command from your directory every time you start working on your project again (and feel free to explore all the option and manual commands)
 
 ### Setting gulp-config.json
 The webTemplate ships with a built in gulp-config.default.json file with default settings for the project. Gulp checks at start if gulp-config.json exists. If it doesnt, it copies settings from gulp-config.default.json and created a new one.
 
-gulp-config.json will NEVER update automatically through github (or any other, unless manually overwritten) update since it is not a part of the default setup and is solely meant for setup of the particular project webTemplate is being used for.
+gulp-config.json will NEVER update automatically through github update (or any other, unless manually overwritten) since it is not a part of the default setup and is solely meant for setup of the particular project webTemplate is being used for.
 
-#### gulp-config.json options
+gulp-config.json can be found in <PROJECT PATH>/gulpFiles directory.
+
+#### gulp-config.default.json options
 ```json
 {
-    "name": "webApp",
-    "settingsGeneration": {
-        "autogenBuildFile": "true",
-        "compileOnLoad": "false",
-        "allowAdditionalSass": "false",
-        "allowAdditionalJS": "false"
-    },
-    "settingsPaths": {
-        "distFolderPath": "example/dist",
-        "srcFolderPath": "example/src",
-        "specialInputPathJS": "_additionalFiles",
-        "specialInputPathSass": "_additionalFiles",
-        "splitObjectDir": "splitObjects"
-    },
-    "settingsFileNames": {
-        "srcFileSass": "layout",
-        "distFileCss": "layout",
-        "distFileJs": "layout"
-    }
+  "name": "webApp",
+  "settingsGeneration": {
+    "autogenBuildFile": "true",
+    "compileOnLoad": "false",
+    "allowAdditionalSass": "false",
+    "allowAdditionalJS": "false"
+  },
+  "settingsPaths": {
+    "distFolderPath": "example/dist",
+    "srcFolderPath": "example/src",
+    "splitObjectDir": "splitObjects",
+    "specialInputPathJS": "_additionalFiles",
+    "specialInputPathSass": "_additionalFiles"
+  },
+  "settingsFileNames": {
+    "srcFileSass": "layout",
+    "distFileCss": "layout",
+    "distFileJs": "layout"
+  },
+  "settingsNotification":{
+    "javascriptCompiler": "both",
+    "javascriptCompilerAdditional": "console",
+    "javascriptCompilerCompressed": "none",
+    "sassCompilerDevelopment": "both",
+    "sassCompilerCompressed": "none",
+    "sassCompilerDevelopmentAdditional": "both",
+    "sassCompilerCompressedAdditional": "none"
+  }
 }
+
 ```
 * name - name of your app, will be used to generate the main javascript object by rollup
 
@@ -175,10 +195,24 @@ gulp-config.json will NEVER update automatically through github (or any other, u
     * distFileCss - the name of the desired output css file
     * distFileJs - the name of the desired js file
     
+*  settingsNotification
+    * All below share same possible settings
+        * "none" - dont show console logs nor notifications
+        * "both" - show console logs and notifications
+        * "console" - show only console logs
+        * "notification" - show only notification
+    * javascriptCompiler - Normal .js/.coffee/.jsx compiler
+    * javascriptCompilerAdditional - Additional files JS bundler
+    * javascriptCompilerCompressed - Final step is JS processing (uglify)
+    * sassCompilerDevelopment - Normal SASS development compiler
+    * sassCompilerCompressed - Normal SASS compressed compiler
+    * sassCompilerDevelopmentAdditional - Additional files SASS development compiler
+    * sassCompilerCompressedAdditional - Additional files SASS compressed compiler
+        
 #### How the automated object literal builder works
 The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx and .coffee files. No need to worry about duplicate file names in the structure, each file gets assigned a custom ID during generation (does not affect the final bundle naming of properties/methods/sub-objects).
 
-This is accoplished by recursively scanning the directory structure of your <sourceDiretory>/js/ directory and automatically creating an importsBundle.js file for Rollup, before rollup is run.
+This is accoplished by recursively scanning the directory structure of your <sourceDiretory>/js/scripts/ directory and automatically creating an importsBundle.js file for Rollup, before rollup is run.
 
 importsBundle.js is regenerated every time the builder is run, so no need to update it manually.
 
@@ -203,21 +237,21 @@ If you chose to use the "splitObject" function, then the generated file and fold
             /specialInput/
                 test.js
 ```
-* Example importsBundle.js code automatically generated from previous structure
+* Example importsBundle.js code automatically generated from previous structure (numbers at the end of imports are just generated IDs to evade overlapping for submodules with same names. These are not part of the final compiled file)
 ```javascript
-    import exampleComponent from './components/exampleComponent.jsx';
-    import exampleModule from './modules/exampleModule.js';
-    import exampleModule2 from './modules/exampleModule2.coffee';
-    import exampleModule3 from './modules/test/exampleModule1.js';
+    import exampleComponent_1 from './components/exampleComponent.jsx';
+    import exampleModule_2 from './modules/exampleModule.js';
+    import exampleModule2_3 from './modules/exampleModule2.coffee';
+    import exampleModule3_4 from './modules/test/exampleModule1.js';
     var exportObject = {
         components: {
-            exampleComponent: exampleComponent,
+            exampleComponent: exampleComponent_1,
         },
         modules: {
-            exampleModule: exampleModule,
-            exampleModule2: exampleModule2,
+            exampleModule: exampleModule_2,
+            exampleModule2: exampleModule2_3,
             test: {
-                exampleModule3: exampleModule3,
+                exampleModule3: exampleModule3_4,
             },
         },
     };
@@ -246,6 +280,29 @@ gulp splitObject --fileName bigJsObject.js
 ```
 
 ## Version history
+
+1.1.7 (Oct. 10. 2017 / 10. 10. 2017)
+```
+Added features
+    Smoothed out & unified error/success reporting
+    Added support for better OS native notifications
+    Added options to turn the notifications/consoles logs on/off/both
+    Added automatic module wrapup for .js/.coffee/.jsx files... so you people dont have to retype it in each new file manually
+    Pruned unnecesry plugins
+    Added sourcemap generation for more SASS tasks and some JS tasks
+    
+Bugfixes
+    Fixed a lot of bugs in task sequences, individiual tasks and file watchers       
+    
+Changes
+    Switched from NPM to Yarn, big readme edits
+    Added "gulp-watch" (for future plans to increase efficiency of the file watchers)
+    Added "gulp-tap" (utility to check what is in the gulp pipes)
+    Added "colors" (for a console log that stands out more)    
+    Removed "babel-loader" (was for webpack, not sure how it got to the build to begin with)
+    Removed "rollup-plugin-coffee-script" (had two coffee script compilers, this one was obsolete)
+   
+```
 
 1.1.6 (Oct. 9. 2017 / 9. 10. 2017)
 ```
