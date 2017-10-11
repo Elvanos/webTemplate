@@ -1,6 +1,6 @@
 # webTemplate project
 
-- Version 1.1.7.1
+- Version 1.1.8
 
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
@@ -20,7 +20,7 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 * Configurable structure of the directories along with file names
 * Automatically generated settings file for easy start
 * Supports both manual and automated modes for bundling JS files
-* Automatically added wrappers for new .js/.coffee/.jsx files for bundling
+* Automatically added wrappers for new .js/.coffee/.jsx/.ts files for bundling
 * Automatic checking and fixing of old/partial config files
 * Custom gulp reporting via OS native notification and console logs (WIP)
 * Deconstruction of any big input object into individual files ready to be bungled again 
@@ -37,7 +37,7 @@ A template project for a new webpage/webapp that aims to provide out of the box 
     * Supports glob sass importing for easier usage
     
 * Rollup JS autobuild tool & watcher
-    * Supports compiling from JSX, ES6 and Coffeescript
+    * Supports compiling from JSX, ES6, Coffeescript and Typescript
         * Input can be mixed in any way as long each is it a separate file
     * Support for additional JS files outside of the main bundle if needed (along with minified versions generated)
     * Automatic custom processing of directories and files
@@ -62,7 +62,7 @@ node.js 6.11.3 (or higher)
         "rollup": "^0.49.3",
         "coffeescript": "^2.0.0-beta5",
         "react": "^15.6.1",
-        "gulp": "^3.9.1"
+        "gulp": "^3.9.1"        
         
     Local nodeJS dev dependencies
         "autoprefixer": "^7.1.4",
@@ -96,7 +96,9 @@ node.js 6.11.3 (or higher)
         "rollup-plugin-babel": "^3.0.2",
         "rollup-plugin-coffee-react": "^1.0.1",
         "run-sequence": "^2.2.0",
-        "traverse": "^0.6.6"
+        "traverse": "^0.6.6",
+        "rollup-plugin-typescript2": "^0.7.0",
+        "typescript": "^2.5.3"
 ```
 
 ### Install guide
@@ -201,7 +203,7 @@ gulp-config.json can be found in <PROJECT PATH>/gulpFiles directory.
         * "both" - show console logs and notifications
         * "console" - show only console logs
         * "notification" - show only notification
-    * javascriptCompiler - Normal .js/.coffee/.jsx compiler
+    * javascriptCompiler - Normal .js/.coffee/.jsx/.ts compiler
     * javascriptCompilerAdditional - Additional files JS bundler
     * javascriptCompilerCompressed - Final step is JS processing (uglify)
     * sassCompilerDevelopment - Normal SASS development compiler
@@ -210,7 +212,7 @@ gulp-config.json can be found in <PROJECT PATH>/gulpFiles directory.
     * sassCompilerCompressedAdditional - Additional files SASS compressed compiler
         
 #### How the automated object literal builder works
-The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx and .coffee files. No need to worry about duplicate file names in the structure, each file gets assigned a custom ID during generation (does not affect the final bundle naming of properties/methods/sub-objects).
+The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx .coffee and .ts files. No need to worry about duplicate file names in the structure, each file gets assigned a custom ID during generation (does not affect the final bundle naming of properties/methods/sub-objects).
 
 This is accoplished by recursively scanning the directory structure of your <sourceDiretory>/js/scripts/ directory and automatically creating an importsBundle.js file for Rollup, before rollup is run.
 
@@ -281,6 +283,21 @@ gulp splitObject --fileName bigJsObject.js
 
 ## Version history
 
+1.1.8 (Oct. 11. 2017 / 11. 10. 2017)
+```
+Added features
+    Added support for Typescript
+    Dropped plans for better gul watcher for now
+    
+Changes
+     Added "rollup-plugin-typescript2"
+     Added "typescript"
+     Removed "gulp-watch" (glitchy with current setup, will redo at some point)
+```
+
+
+
+
 1.1.7.1 (Oct. 11. 2017 / 11. 10. 2017)
 ```
 Bugfixes
@@ -293,7 +310,7 @@ Added features
     Smoothed out & unified error/success reporting
     Added support for better OS native notifications
     Added options to turn the notifications/consoles logs on/off/both
-    Added automatic module wrapup for .js/.coffee/.jsx files... so you people dont have to retype it in each new file manually
+    Added automatic module wrapup for .js/.coffee/.jsx/.ts files... so you people dont have to retype it in each new file manually
     Pruned unnecesry plugins
     Added sourcemap generation for more SASS tasks and some JS tasks
     

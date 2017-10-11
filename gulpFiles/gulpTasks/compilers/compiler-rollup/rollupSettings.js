@@ -43,6 +43,9 @@ module.exports = function (gulp, plugins, projectSettings) {
                         }),
                         plugins.coffeeReact({
                             exclude: 'node_modules/!**'
+                        }),
+                        plugins.typescript({
+                            exclude: 'node_modules/!**'
                         })
                     ]
 

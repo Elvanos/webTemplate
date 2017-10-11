@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/Elvanos/webTemplate.git"
   },
-  "version": "1.1.7.1",
+  "version": "1.1.8",
   "globalDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.5.0",
@@ -23,7 +23,6 @@
     "console-sync": "0.0.1",
     "directory-tree": "^2.0.0",
     "gulp": "^3.9.1",
-    "gulp-batch": "^1.0.5",
     "gulp-beautify": "^2.0.1",
     "gulp-better-rollup": "^1.1.1",
     "gulp-concat": "^2.6.1",
@@ -37,7 +36,6 @@
     "gulp-sourcemaps": "^2.6.1",
     "gulp-tap": "^1.0.1",
     "gulp-uglify": "^3.0.0",
-    "gulp-watch": "^4.3.11",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.5.3",
     "node-sass-glob-importer": "^5.0.0-alpha.13",
@@ -46,7 +44,9 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-coffee-react": "^1.0.1",
     "run-sequence": "^2.2.0",
-    "traverse": "^0.6.6"
+    "traverse": "^0.6.6",
+    "rollup-plugin-typescript2": "^0.7.0",
+    "typescript": "^2.5.3"
   },
   "dependencies": {
     "sharp": "^0.18.4"

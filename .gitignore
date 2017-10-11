@@ -57,8 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-# sass cache
+# cache
 .sass-cache/
+.rpt2_cache/
 
 # lock files
 package-lock.json

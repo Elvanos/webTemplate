@@ -40,6 +40,7 @@
             plugins.rollup                 = require('gulp-better-rollup');
             plugins.babel                  = require('rollup-plugin-babel');
             plugins.coffeeReact            = require('rollup-plugin-coffee-react');
+            plugins.typescript             = require('rollup-plugin-typescript2');
 
 
         // Setup & bugfix if any found

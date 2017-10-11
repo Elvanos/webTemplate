@@ -77,7 +77,7 @@ module.exports = function (gulp, plugins, projectSettings) {
                                 let suffix = '';
 
                                 // React to different file types
-                                    if (treeLevel[i].extension === '.js' || treeLevel[i].extension === '.jsx') {
+                                    if (treeLevel[i].extension === '.js' || treeLevel[i].extension === '.jsx' || treeLevel[i].extension === '.ts') {
                                         prefix ='let '+fileName+' = function () {\n\n';
                                         suffix = '};\nexport default ' +fileName+';';
                                     }

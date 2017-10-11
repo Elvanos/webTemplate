@@ -10,8 +10,7 @@ module.exports = function (gulp, plugins, projectSettings, callback) {
             gulp.watch([
                 srcFolderPath + '/js/scripts/**/*',
                 srcFolderPath + '/js/scripts/'+ specialInputPathJS + '/**/**',
-                srcFolderPath + '/js/scripts/' + specialInputPathJS + '/**',
-                '!' + srcFolderPath + '/js/importsBundle.js'
+                srcFolderPath + '/js/scripts/' + specialInputPathJS + '/**'
             ], callback);
 
         }else{
@@ -19,8 +18,7 @@ module.exports = function (gulp, plugins, projectSettings, callback) {
             gulp.watch([
                 srcFolderPath + '/js/scripts/**/*',
                 '!' + srcFolderPath + '/js/scripts/'+ specialInputPathJS + '/**/**',
-                '!' + srcFolderPath + '/js/scripts/' + specialInputPathJS + '/**',
-                '!' + srcFolderPath + '/js/importsBundle.js'
+                '!' + srcFolderPath + '/js/scripts/' + specialInputPathJS + '/**'
             ], callback);
 
         }
