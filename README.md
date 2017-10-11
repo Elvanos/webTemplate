@@ -1,6 +1,6 @@
 # webTemplate project
 
-- Version 1.1.8
+- Version 1.1.8.1
 
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
@@ -120,7 +120,7 @@ node.js 6.11.3 (or higher)
     yarn global add gulp    
     ``` 
 5. Open your favorite terminal/cmd interface, navigate to your work folder
-    * Type "npm install" and wait and wait the template finishes installing
+    * Type "yarn install" and wait and wait the template finishes installing
         ```
         yarn install
         ```        
@@ -283,6 +283,12 @@ gulp splitObject --fileName bigJsObject.js
 
 ## Version history
 
+1.1.8.1 (Oct. 11. 2017 / 11. 10. 2017)
+```
+Changes
+     Fixed typo in Readme (thanks S3B4S)
+```
+
 1.1.8 (Oct. 11. 2017 / 11. 10. 2017)
 ```
 Added features
@@ -294,9 +300,6 @@ Changes
      Added "typescript"
      Removed "gulp-watch" (glitchy with current setup, will redo at some point)
 ```
-
-
-
 
 1.1.7.1 (Oct. 11. 2017 / 11. 10. 2017)
 ```
