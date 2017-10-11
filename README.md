@@ -1,16 +1,15 @@
 # webTemplate project
 
-- Version 1.1.8.1
+- Version 1.1.8.2
 
 A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
 
 ## README Content
 1. [Support & Features](#support--features)
-2. [Getting Started](#getting-started)
-    1. [Prerequisites](#prerequisites)
-    2. [Install guide](#install-guide)
-    3. [Setting gulp-config.json](#setting-gulp-configjson)
-    4. [How the automated object literal builder works](#how-the-automated-object-literal-builder-works)
+2. [Getting Started](#getting-started)  
+    1. [Install guide](#install-guide)
+    2. [Setting gulp-config.json](#setting-gulp-configjson)
+    3. [How the automated object literal builder works](#how-the-automated-object-literal-builder-works)
 3. [Manual Tasks](#manual-tasks)
     1. [forceCompile](#forcecompile)
     2. [splitObject](#splitobject)
@@ -47,59 +46,6 @@ A template project for a new webpage/webapp that aims to provide out of the box 
     * Minified & dev version of the js output files
 
 ## Getting Started
-
-
-### Prerequisites
-
-
-```
-node.js 6.11.3 (or higher)
-    yarn 1.1.0
-    
-    Global nodeJS packages
-        "babel-cli": "^6.26.0",
-        "babel-preset-react": "^6.5.0",
-        "rollup": "^0.49.3",
-        "coffeescript": "^2.0.0-beta5",
-        "react": "^15.6.1",
-        "gulp": "^3.9.1"        
-        
-    Local nodeJS dev dependencies
-        "autoprefixer": "^7.1.4",
-        "babel-core": "^6.26.0",
-        "babel-plugin-external-helpers": "^6.22.0",
-        "babel-preset-latest": "^6.24.1",
-        "babel-preset-react": "^6.24.1",
-        "colors": "^1.1.2",
-        "console-sync": "0.0.1",
-        "directory-tree": "^2.0.0",
-        "gulp": "^3.9.1",
-        "gulp-beautify": "^2.0.1",
-        "gulp-better-rollup": "^1.1.1",
-        "gulp-concat": "^2.6.1",
-        "gulp-load-plugins": "^1.5.0",
-        "gulp-parameterized": "^0.1.1",
-        "gulp-plumber": "^1.1.0",
-        "gulp-plumber-notifier": "0.0.3",
-        "gulp-postcss": "^7.0.0",
-        "gulp-rename": "^1.2.2",
-        "gulp-sass": "^3.1.0",
-        "gulp-sourcemaps": "^2.6.1",
-        "gulp-tap": "^1.0.1",
-        "gulp-uglify": "^3.0.0",
-        "gulp-watch": "^4.3.11",
-        "node-notifier": "^5.1.2",
-        "node-sass": "^4.5.3",
-        "node-sass-glob-importer": "^5.0.0-alpha.13",
-        "object-assign": "^4.1.1",
-        "require-dir": "^0.3.2",
-        "rollup-plugin-babel": "^3.0.2",
-        "rollup-plugin-coffee-react": "^1.0.1",
-        "run-sequence": "^2.2.0",
-        "traverse": "^0.6.6",
-        "rollup-plugin-typescript2": "^0.7.0",
-        "typescript": "^2.5.3"
-```
 
 ### Install guide
 1. Download and install your appropriate version of node.js 
@@ -283,6 +229,15 @@ gulp splitObject --fileName bigJsObject.js
 
 ## Version history
 
+1.1.8.2 (Oct. 11. 2017 / 11. 10. 2017)
+```
+
+Removed
+    Removed Prerequisities from Readme
+
+Changes
+     Updated Readme (removed Prerequisities as they were... well useless since they get installed with installation)
+```
 1.1.8.1 (Oct. 11. 2017 / 11. 10. 2017)
 ```
 Changes
