@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/Elvanos/webTemplate.git"
   },
-  "version": "1.1.7",
+  "version": "1.1.7.1",
   "globalDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.5.0",
