@@ -281,6 +281,12 @@ gulp splitObject --fileName bigJsObject.js
 
 ## Version history
 
+1.1.7.1 (Oct. 11. 2017 / 11. 10. 2017)
+```
+Bugfixes
+    Fixed double logging of output and put file with extra JS files
+```
+
 1.1.7 (Oct. 10. 2017 / 10. 10. 2017)
 ```
 Added features

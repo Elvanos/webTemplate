@@ -25,31 +25,35 @@ module.exports = function (gulp, plugins, projectSettings) {
             .pipe(plugins.tap(
                 function (file) {
 
-                    // Check notification settings
-                    if (notSettings === 'both' || notSettings === 'notification') {
+                    let fileExtension = plugins.path.extname(file.path).substr(1);
 
-                        plugins.notifier.notify(
-                            {
-                                title: projectSettings.name + ' - ' + taskName,
-                                message: distFileJs + '.concat.js file successfully compiled!',
-                                sound: false
-                            });
+                    if (fileExtension !== 'map') {
+
+                        // Check notification settings
+                        if (notSettings === 'both' || notSettings === 'notification') {
+
+                            plugins.notifier.notify(
+                                {
+                                    title: projectSettings.name + ' - ' + taskName,
+                                    message: distFileJs + '.concat.js file successfully compiled!',
+                                    sound: false
+                                });
+
+                        }
+
+                        if (notSettings === 'both' || notSettings === 'console') {
+
+                            console.log(
+                                (
+                                    'Task: ' + taskName + '\n' +
+                                    'Message: ' + distFileJs + '.concat.js file successfully compiled!' + '\n'
+                                )
+                                    .green
+                            );
+
+                        }
 
                     }
-
-                    if (notSettings === 'both' || notSettings === 'console') {
-
-                        console.log(
-                            (
-                                'Task: ' + taskName + '\n' +
-                                'Message: ' + distFileJs + '.concat.js file successfully compiled!' + '\n'
-                            )
-                                .green
-                        );
-
-                    }
-
-
                 }
             ))
 

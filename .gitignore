@@ -72,3 +72,6 @@ gulpFiles/gulp-config.json
 
 # ignore example dist folder
 example/dist
+
+# person icon for win10
+desktop.ini
