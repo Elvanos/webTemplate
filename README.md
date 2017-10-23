@@ -8,7 +8,7 @@ A project manager system for a new or existing webpages/webapps that aim to prov
 1. [Support & Features](#support--features)
 2. [Getting Started](#getting-started)  
     1. [Install guide](#install-guide)
-    2. [Setting webTemplateConfig.json](#setting-webTemplateConfigjson)
+    2. [Setting webTemplateConfig.json and projectConfig.json](#setting-webtemplateconfigjson)
     3. [How the automated object literal builder works](#how-the-automated-object-literal-builder-works)
 4. [Version history](#version-history)
 
@@ -81,6 +81,9 @@ It will however add new keys and values if they will be added to newer webTempla
 webTemplate.json can be found in the "webTemplate" directory.
 
 * Same applies to projectConfig.json files, except for the fact that mew files are generated from default project directory.
+
+* Detailt can be found here: HIGHLY SUGGESTED YOU READ THIS!!!
+    * [Config file details](../docs/configDetails.md)
 
 #### How the automated object literal builder works
 The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx .coffee and .ts files. No need to worry about duplicate file names in the structure, each file gets assigned a custom ID during generation (does not affect the final bundle naming of properties/methods/sub-objects).
