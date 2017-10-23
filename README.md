@@ -1,49 +1,46 @@
 # webTemplate project
 
-- Version 1.1.8.2
+- Version 2.0.0
 
-A template project for a new webpage/webapp that aims to provide out of the box support with minimal installation while offering simple config options to customize the project to one's needs.
+A project manager system for a new or existing webpages/webapps that aim to provide a heavily customizable settings, but easy to understand and use while automating a lot of mundane tasks web developers tend to struggle with. 
 
 ## README Content
 1. [Support & Features](#support--features)
 2. [Getting Started](#getting-started)  
     1. [Install guide](#install-guide)
-    2. [Setting gulp-config.json](#setting-gulp-configjson)
+    2. [Setting webTemplateConfig.json](#setting-webTemplateConfigjson)
     3. [How the automated object literal builder works](#how-the-automated-object-literal-builder-works)
-3. [Manual Tasks](#manual-tasks)
-    1. [forceCompile](#forcecompile)
-    2. [splitObject](#splitobject)
 4. [Version history](#version-history)
 
 ## Support & Features
-* Configurable structure of the directories along with file names
 * Automatically generated settings file for easy start
-* Supports both manual and automated modes for bundling JS files
-* Automatically added wrappers for new .js/.coffee/.jsx/.ts files for bundling
-* Automatic checking and fixing of old/partial config files
-* Custom gulp reporting via OS native notification and console logs (WIP)
-* Deconstruction of any big input object into individual files ready to be bungled again 
-    
+* Support for CSS preprocessors Sass (both Node AND Ruby version), Less and Stylus
+* Support for JS Rollup bundles with build in Coffeescript, JSX, Typescript and Babel compilation
+* Support for source maps
+* Support for minification of both CSS and JS
+* Fully automated watchers for both JS and all CSS preprocessors
+* Optimized performance - webTemplate only loads extensions and modules that are actually used by your projects
+* Project management system - set your project statuses, add them to categories, adjust the file structure to your needs!
+* Configurable structure of the directories along with file names
+
 * Gulp task runner
     * Fully automated, just needs to be started once
-    * Support both for manual and automated tasks (can be configured) 
-    * Custom error/smooth run reports (WIP) 
- 
-* SASS preprocessor autobuild & watcher
-    * LibSass 3.5 and node-sass
-    * Minified & dev version of the style file along with sourcemaps
-    * Support for additional .sass/.scss files outside of the main bundle if needed (along with minified version generated)
-    * Supports glob sass importing for easier usage
-    
+    * Custom error/smooth run reports (no random crashes with webTemplate just because compile hiccups once)
+
+* CSS preprocessors
+    * Support the whole "big 3" bundle - Sass, Less and Stylus
+    * Automatic source maps, minification and auto-prefixer for all of them
+    * Support for both big bundles files and singular files if needed
+   
 * Rollup JS autobuild tool & watcher
     * Supports compiling from JSX, ES6, Coffeescript and Typescript
-        * Input can be mixed in any way as long each is it a separate file
+        * Input can be mixed in any way as long each is it a separate files
     * Support for additional JS files outside of the main bundle if needed (along with minified versions generated)
     * Automatic custom processing of directories and files
         * Supported modes: Object literal (more WIP)
-        * Support infinite recursive subdirectories/files and comes up with a custom ID build system
-        * Custom files/libraries/script batches can be imported separately without being added to default output
+        * Support infinite recursive subdirectories/files and comes up with a custom ID build system   
     * Minified & dev version of the js output files
+    * Source maps currently WIP as Rollup is a little buggy with them atm 
 
 ## Getting Started
 
@@ -51,21 +48,16 @@ A template project for a new webpage/webapp that aims to provide out of the box 
 1. Download and install your appropriate version of node.js 
     * [node.js download page](https://nodejs.org/en/download/)
 2. Download and install Yarn
-    * [yarn download page](https://yarnpkg.com/en/)
+    * [yarn download page](https://yarnpkg.com/en/docs/install)
 3. Now install the actual webTemplate
     * Option one: Clone this repository from github - https://github.com/Elvanos/webTemplate.git
     * Option two: Download it and unpack it    
     [webTemplate github page](https://github.com/Elvanos/webTemplate)
-4. Install the global nodeJS packages by following commands
-    ```
-    yarn global add babel-cli
-    yarn global add babel-preset-react
-    yarn global add rollup
-    yarn global add coffeescript
-    yarn global add react
-    yarn global add gulp    
+4. Install the global nodeJS package by following commands
     ``` 
-5. Open your favorite terminal/cmd interface, navigate to your work folder
+    yarn global add gulp
+    ``` 
+5. Open your favorite terminal/cmd interface, navigate to your "webTemplate" folder
     * Type "yarn install" and wait and wait the template finishes installing
         ```
         yarn install
@@ -73,100 +65,32 @@ A template project for a new webpage/webapp that aims to provide out of the box 
         * If you are updating from older version, it is suggested to use this command instead         
             ```
                 yarn install --force
-            ```     
-    * Type "gulp" 
-        ```
-        gulp
-        ```
-        * You should get a message saying that a new "gulp-config.json" file has been created unless you had one before
-6. Set your gulp-config.json to your needs (can be found in "gulpFiles" directory, if you do not have one, go to next step and then look for it again)
-7. Done! Just make sure you run "gulp" command from your directory every time you start working on your project again (and feel free to explore all the option and manual commands)
+            ```             
+6. Set your "webTemplateConfig.json" to your needs and proceed to create a new folder in the "projects" directory for your project (or just copy in an older one)
+7. Run   ``` gulp ``` from either your "webTemplate" directory or from your project folder
+    * If your project directory contains another "gulpfile" then you will need to run gulp from "webTemplate" directory
+8. Edit the newly created "projectConfig.json" to your needs and restart gulp
+7. Done! Just make sure you run "gulp" command every time you start working on your projects again (and feel free to explore all the option)
 
-### Setting gulp-config.json
-The webTemplate ships with a built in gulp-config.default.json file with default settings for the project. Gulp checks at start if gulp-config.json exists. If it doesnt, it copies settings from gulp-config.default.json and created a new one.
+### Setting webTemplateConfig.json
+The webTemplate ships with a built in webTemplateConfig.default.json file with default settings for the project. Gulp checks at start if webTemplateConfig.json exists. If it doesn't, it copies settings from webTemplateConfig.default.json and created a new one.
 
-gulp-config.json will NEVER update automatically through github update (or any other, unless manually overwritten) since it is not a part of the default setup and is solely meant for setup of the particular project webTemplate is being used for.
+webTemplateConfig.json will NEVER update automatically through github update (or any other, unless manually overwritten) since it is not a part of the default setup and is solely meant for setup of the particular install of the webTemplate.
+It will however add new keys and values if they will be added to newer webTemplate in the future - you will be clearly informed of this at the start of the program.
 
-gulp-config.json can be found in <PROJECT PATH>/gulpFiles directory.
+webTemplate.json can be found in the "webTemplate" directory.
 
-#### gulp-config.default.json options
-```json
-{
-  "name": "webApp",
-  "settingsGeneration": {
-    "autogenBuildFile": "true",
-    "compileOnLoad": "false",
-    "allowAdditionalSass": "false",
-    "allowAdditionalJS": "false"
-  },
-  "settingsPaths": {
-    "distFolderPath": "example/dist",
-    "srcFolderPath": "example/src",
-    "splitObjectDir": "splitObjects",
-    "specialInputPathJS": "_additionalFiles",
-    "specialInputPathSass": "_additionalFiles"
-  },
-  "settingsFileNames": {
-    "srcFileSass": "layout",
-    "distFileCss": "layout",
-    "distFileJs": "layout"
-  },
-  "settingsNotification":{
-    "javascriptCompiler": "both",
-    "javascriptCompilerAdditional": "console",
-    "javascriptCompilerCompressed": "none",
-    "sassCompilerDevelopment": "both",
-    "sassCompilerCompressed": "none",
-    "sassCompilerDevelopmentAdditional": "both",
-    "sassCompilerCompressedAdditional": "none"
-  }
-}
+* Same applies to projectConfig.json files, except for the fact that mew files are generated from default project directory.
 
-```
-* name - name of your app, will be used to generate the main javascript object by rollup
-
-* settingsGeneration
-    * autogenBuildFile - (true/false) - determines if the output file should be generated automatically via the automated object literal builder or if you wish to use a manual file that will never be automatically overwritten, both can exist simultaneously
-    * allowAdditionalSass - (true/false) - support for standalone additional sass/scss files in "sass/additionalFiles" subdirectory. Each of these files will generate one one-to-one css file (along with a minified version). Directory also contains an "ignore" directory for extra files that will be completely ignored by the compiler(for partials/libraries/mixins/etc.)
-    * allowAdditionalJS - (true/false) - support for extra files that should not be bunched in the big batch generated by Rollup. This can include libraries or other files that cant handle such treatment (final results will be a single concatenated file)
-    * compileOnLoad - (true/false) - Determines if the compilers should run once on load ever time you start "gulp" command. Otherwise, they can be called via singular gulp commands
-    
-* settingsPaths
-    * distFolderPath - folder for all the automatically generated files
-    * srcFolderPath - folder for all the source files
-    * specialInputPathJS - folder for all separate JS files you wish to add (script that dont fit in the main js object or libraries)
-    * specialInputPathSass - folder for all separate JS files you dont wish to clump up with the main Rollup object output
-    * splitObjectDir - folder where "splitObject" task dumps all generated files and directories
-    
-* settingsFileNames
-    * srcFileSass - the name of the main source sass file
-    * distFileCss - the name of the desired output css file
-    * distFileJs - the name of the desired js file
-    
-*  settingsNotification
-    * All below share same possible settings
-        * "none" - dont show console logs nor notifications
-        * "both" - show console logs and notifications
-        * "console" - show only console logs
-        * "notification" - show only notification
-    * javascriptCompiler - Normal .js/.coffee/.jsx/.ts compiler
-    * javascriptCompilerAdditional - Additional files JS bundler
-    * javascriptCompilerCompressed - Final step is JS processing (uglify)
-    * sassCompilerDevelopment - Normal SASS development compiler
-    * sassCompilerCompressed - Normal SASS compressed compiler
-    * sassCompilerDevelopmentAdditional - Additional files SASS development compiler
-    * sassCompilerCompressedAdditional - Additional files SASS compressed compiler
-        
 #### How the automated object literal builder works
 The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx .coffee and .ts files. No need to worry about duplicate file names in the structure, each file gets assigned a custom ID during generation (does not affect the final bundle naming of properties/methods/sub-objects).
 
-This is accoplished by recursively scanning the directory structure of your <sourceDiretory>/js/scripts/ directory and automatically creating an importsBundle.js file for Rollup, before rollup is run.
+This is accomplished by recursively scanning the directory structure of your <sourceDiretory>/javaScript/scripts/ directory and automatically creating an importsBundle.js file for Rollup, before rollup is run.
 
 importsBundle.js is regenerated every time the builder is run, so no need to update it manually.
 
 This feature can be turned off in case you wish to create the file manually instead. Both manual and automated files are exclusive, dont override each other and can co-exist next to each other (only one gets generated at a time based on the settings tho).
 
-If you chose to use the "splitObject" function, then the generated file and folder structure will be immediately useable for bundling. You just need to copy the files where you need them manually.
 
 * Example file structure
 ```
@@ -206,28 +130,15 @@ If you chose to use the "splitObject" function, then the generated file and fold
     export default exportObject;
 ```
 
-## Manual tasks
-webApp comes with a bunch of pre-built manual tasks that you can use at any point through the cli interface. All of these commands share the following structure (assuming you are already in the working directory gulpfile.js)
-```
-gulp <task name> <parameters, if task has any>
-```
-#### forceCompile
-Manually runs all compilers you have enabled and regenerates all generated files on demand
-* parameters: none
-* example:
-```
-gulp forceCompile
-```
-#### splitObject 
-Splits a java script object into smaller parts and created an adequate file and folder structure that can be later used by the automatic or manual file builder 
-* parameters:
-    * fileName - name of the file you wish to take apart (can also include a path to it)
-* example:
-```
-gulp splitObject --fileName bigJsObject.js
-```
 
 ## Version history
+
+2.0.0 (Oct. 24. 10. 2017 / 24. 10. 2017)
+
+```
+Complete rewrite in Coffeescript
+Complete change to structure, project management, modules and everything else
+```
 
 1.1.8.2 (Oct. 11. 2017 / 11. 10. 2017)
 ```

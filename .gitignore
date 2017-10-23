@@ -65,9 +65,6 @@ typings/
 package-lock.json
 yarn.lock
 
-# local settings file
-gulpFiles/gulp-config.json
-
 # idea settings
 .idea/
 
@@ -76,3 +73,7 @@ example/dist
 
 # person icon for win10
 desktop.ini
+
+# webTemplate files
+webTemplateConfig.json
+projects/*

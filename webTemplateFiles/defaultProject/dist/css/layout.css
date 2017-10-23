@@ -1,0 +1,11 @@
+.test {
+  width: 500px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 20px; }
+
+.ble {
+  height: 500px; }
+
+/*# sourceMappingURL=layout.css.map */

@@ -1,0 +1,12 @@
+{
+   "name": "webTemplate",
+   "projectDirectory": "projects",
+   "allowOnlyOnCurrent": false,
+   "includeStatus": {
+      "active": true,
+      "onhold": true,
+      "finished": false,
+      "canceled": false,
+      "fresh": true
+   }
+}
