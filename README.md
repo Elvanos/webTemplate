@@ -83,7 +83,7 @@ webTemplate.json can be found in the "webTemplate" directory.
 * Same applies to projectConfig.json files, except for the fact that mew files are generated from default project directory.
 
 * Detailt can be found here: HIGHLY SUGGESTED YOU READ THIS!!!
-    * [Config file details](../docs/configDetails.md)
+    * [Config file details](/docs/configDetails.md)
 
 #### How the automated object literal builder works
 The webTemplate comes with a custom coded system to build an [object literal](http://www.dyn-web.com/tutorials/object-literal/) out of your scattered .js, .jsx .coffee and .ts files. No need to worry about duplicate file names in the structure, each file gets assigned a custom ID during generation (does not affect the final bundle naming of properties/methods/sub-objects).
