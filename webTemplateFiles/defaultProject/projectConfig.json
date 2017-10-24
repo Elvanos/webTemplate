@@ -89,7 +89,6 @@
                      }
                   },
                   "modules": {
-                     "globSass": true,
                      "autoPrefix": true
                   }
                },

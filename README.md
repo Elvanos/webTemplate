@@ -1,6 +1,6 @@
 # webTemplate project
 
-- Version 2.0.0
+- Version 2.0.1
 
 A project manager system for a new or existing webpages/webapps that aim to provide a heavily customizable settings, but easy to understand and use while automating a lot of mundane tasks web developers tend to struggle with. 
 
@@ -15,6 +15,7 @@ A project manager system for a new or existing webpages/webapps that aim to prov
 ## Support & Features
 * Automatically generated settings file for easy start
 * Support for CSS preprocessors Sass (both Node AND Ruby version), Less and Stylus
+    * Ruby Sass also needs to be installed manually via Ruby, it is NOT a part of webTemplate!
 * Support for JS Rollup bundles with build in Coffeescript, JSX, Typescript and Babel compilation
 * Support for source maps
 * Support for minification of both CSS and JS
@@ -67,10 +68,13 @@ A project manager system for a new or existing webpages/webapps that aim to prov
                 yarn install --force
             ```             
 6. Set your "webTemplateConfig.json" to your needs and proceed to create a new folder in the "projects" directory for your project (or just copy in an older one)
-7. Run   ``` gulp ``` from either your "webTemplate" directory or from your project folder
+7. Start the "webTemplate.bat" file and it will start the program for you. Also feel free to make a handy shortcut somewhere convenient for you.
+* You can also run   ``` gulp ``` from either your "webTemplate" directory or from your project folder
     * If your project directory contains another "gulpfile" then you will need to run gulp from "webTemplate" directory
-8. Edit the newly created "projectConfig.json" to your needs and restart gulp
-7. Done! Just make sure you run "gulp" command every time you start working on your projects again (and feel free to explore all the option)
+8. Now navigate to "webTemplateFiles" directory, find "defaultProject" folder and copy it to your "projects" directory.
+    * This is a temporary solution, will be automized in the future release.
+9. Edit "projectConfig.json" inside your copied directory to your needs and restart gulp
+10. Done! Just make sure you run "gulp" command every time you start working on your projects again (and feel free to explore all the option)
 
 ### Setting webTemplateConfig.json
 The webTemplate ships with a built in webTemplateConfig.default.json file with default settings for the project. Gulp checks at start if webTemplateConfig.json exists. If it doesn't, it copies settings from webTemplateConfig.default.json and created a new one.
@@ -135,6 +139,16 @@ This feature can be turned off in case you wish to create the file manually inst
 
 
 ## Version history
+
+2.0.1 (Oct. 24. 10. 2017 / 24. 10. 2017)
+
+```
+Updated
+    Readme file
+Added
+    Docs directory with config file detailed explanation
+    Gulp run BAT file for lazy people... or people who want to run webTemplate as an external app automatically
+```
 
 2.0.0 (Oct. 24. 10. 2017 / 24. 10. 2017)
 
