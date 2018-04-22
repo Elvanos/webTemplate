@@ -1,6 +1,6 @@
 # webTemplate project
 
-- Version 2.0.1
+- Version 2.0.2
 
 A project manager system for a new or existing webpages/webapps that aim to provide a heavily customizable settings, but easy to understand and use while automating a lot of mundane tasks web developers tend to struggle with. 
 
@@ -139,6 +139,14 @@ This feature can be turned off in case you wish to create the file manually inst
 
 
 ## Version history
+
+2.0.2 (Apr. 23. 2018 / 23. 4. 2018)
+
+```
+Updated
+    Temporarily disabled babel for concat files from gulp (glitch with imported libraries)
+
+```
 
 2.0.1 (Oct. 24. 10. 2017 / 24. 10. 2017)
 

@@ -193,8 +193,8 @@ javaScript = (app,appModule,moduleData) ->
                 return dep.gulpConcat distFileNameMain + ifAdditionalFilesOverride + '.js'
             
             # Compile with Babel if Additional files
-            .pipe dep.gulpCond ifAdditionalFiles is true, () ->
-                return dep.gulpBabel gulpBabelConfig
+            #.pipe dep.gulpCond ifAdditionalFiles is true, () ->
+                #return dep.gulpBabel gulpBabelConfig
             
             # Output file if additional files
             .pipe dep.gulpCond ifAdditionalFiles is true, () ->

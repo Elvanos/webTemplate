@@ -277,11 +277,13 @@ javaScript = function(app, appModule, moduleData) {
       return dep.gulpConcat(distFileNameMain + ifAdditionalFilesOverride + '.js');
     
     // Compile with Babel if Additional files
-    })).pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
-      return dep.gulpBabel(gulpBabelConfig);
+    }))
+       /* .pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
+            return dep.gulpBabel(gulpBabelConfig);
+        }))*/
     
     // Output file if additional files
-    })).pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
+   .pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
       return dep.gulp.dest(distPathMain);
     // Output also the minified files IF minify is allowed
     })).pipe(dep.gulpCond(ifAdditionalFiles === true && ifMinifyAdditional === true, function() {
