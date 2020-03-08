@@ -85,55 +85,55 @@ var javaScript;
 
 javaScript = function(app, appModule, moduleData) {
   var dep, distFileNameMain, distPathMain, gulpBabelConfig, ifAdditionalFiles, ifAdditionalFilesOverride, ifMainFiles, ifMinify, ifMinifyAdditional, ifSourceMaps, rollupConfig, rollupFormat, rollupPlugins, srcPath, srcPathAdditional, srcPathMain, taskName;
-  
+
   // Set task name
   taskName = 'javaScript';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // Clear TS cache, because it is buggy as hell
   if (dep.fs.existsSync('./.rpt2_cache')) {
     dep.fs.removeSync('./.rpt2_cache');
   }
-  
+
   // SRC path
   srcPath = moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'javaScript/';
-  
+
   // SRC path additional files
   srcPathAdditional = srcPath + 'scripts/' + moduleData.module.additionalFiles.srcFolder + '/*.js';
-  
+
   // IF Auto Build is on, use auto bundle, otherwise use the manual one
   if (moduleData.module.buildHelper.support === true && moduleData.module.buildHelper.autoBuild.support === true) {
-    
+
     // Check files for proper formatting
 
     // Run importsBundle builder
     appModule._javaScript.buildImportsBundle(app, appModule, moduleData, srcPath);
-    
+
     // Set SRC Path
     srcPathMain = srcPath + 'importsBundle.js';
   } else {
-    
+
     // Set SRC Path
     srcPathMain = srcPath + 'manualBundle.js';
   }
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/js';
-  
+
   // IF dist to root
   if (moduleData.module.outputToRoot) {
     distPathMain = moduleData.path;
   }
-  
+
   // DIST file name
   distFileNameMain = moduleData.module.distName;
-  
+
   // Rollup config
   rollupConfig = {};
   rollupFormat = 'iife';
-  
+
   // Rollup plugins
   rollupPlugins = [];
   rollupPlugins.push(dep.rollupBabel());
@@ -141,30 +141,30 @@ javaScript = function(app, appModule, moduleData) {
   if (moduleData.module.modules.coffeeScript.support === true) {
     rollupPlugins.push(dep.rollupCoffeeScript());
   }
-  
+
   // If Type Script support
   if (moduleData.module.modules.typeScript.support === true) {
     rollupPlugins.push(dep.rollupTypeScript());
   }
-  
+
   // If additional files
   ifAdditionalFiles = false;
   if (moduleData.module.additionalFiles.support === true) {
     ifAdditionalFiles = true;
-    
+
     // If additional files override main
     ifAdditionalFilesOverride = '.concat';
     if (moduleData.module.additionalFiles.overWriteOriginal === true) {
       ifAdditionalFilesOverride = '';
     }
   }
-  
+
   // If NOT main
   ifMainFiles = true;
   if (moduleData.module.additionalFiles.support === true && moduleData.module.additionalFiles.onlyAdditional === true) {
     ifMainFiles = false;
   }
-  
+
   //gulpBabelConfig
   gulpBabelConfig = {
     "presets": [
@@ -180,29 +180,29 @@ javaScript = function(app, appModule, moduleData) {
     ],
     "plugins": ["external-helpers"]
   };
-  
+
   //Get IF values
 
   // If minify
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.allowMain === true) {
     ifMinify = true;
   }
-  
+
   // If minify Additional
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.separateFiles === true) {
     ifMinifyAdditional = true;
   }
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
-    
+
     // Load Main files
     return stream = dep.gulp.src('nonExistingFile').pipe(dep.gulpCond(ifMainFiles === true, function() {
       return dep.gulpAdd(srcPathMain);
-    
+
     // Load possible error reports
     // Load sourcemaps if supported
     })).pipe(dep.gulpPlumberNofifier()).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -213,7 +213,7 @@ javaScript = function(app, appModule, moduleData) {
       moduleName: moduleData.config.projectName.replace(/[- ]/g, ''),
       cache: true,
       onwarn: function(warning) {
-        
+
         // Skip glitchy warnings
         if (warning.code === 'THIS_IS_UNDEFINED') {
 
@@ -222,7 +222,7 @@ javaScript = function(app, appModule, moduleData) {
         }
       },
       plugins: rollupPlugins
-    
+
     // Rename output file to config value
     // Write sourcemap if supported
     }, rollupFormat)).pipe(dep.gulpRename(distFileNameMain + ".js")).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -230,11 +230,11 @@ javaScript = function(app, appModule, moduleData) {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Compile output to supported browser JS with babel
-    
+
     // Output files
-    
+
     // Output also the minified files IF minify is allowed
     })).pipe(dep.gulpBabel(gulpBabelConfig)).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpJSminify();
@@ -244,15 +244,15 @@ javaScript = function(app, appModule, moduleData) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.reporting.notification === true) {
           dep.notify.notify({
@@ -261,7 +261,7 @@ javaScript = function(app, appModule, moduleData) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName + 'Additional'));
@@ -271,17 +271,17 @@ javaScript = function(app, appModule, moduleData) {
     // Load concat files if Additional files
     })).pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
       return dep.gulpAdd.append(srcPathAdditional);
-    
+
     // Concat files if Additional files
     })).pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
       return dep.gulpConcat(distFileNameMain + ifAdditionalFilesOverride + '.js');
-    
+
     // Compile with Babel if Additional files
     }))
        /* .pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
             return dep.gulpBabel(gulpBabelConfig);
         }))*/
-    
+
     // Output file if additional files
    .pipe(dep.gulpCond(ifAdditionalFiles === true, function() {
       return dep.gulp.dest(distPathMain);
@@ -299,10 +299,10 @@ javaScript = function(app, appModule, moduleData) {
       return dep.gulpTap(function(file) {
         var fileExtension;
         fileExtension = dep.path.extname(file.path).substr(1);
-        
+
         // Do not log for map and min files
         if (fileExtension !== 'map' && fileExtension !== 'min') {
-          
+
           // Check notification settings
           if (moduleData.module.reporting.notification === true) {
             dep.notify.notify({
@@ -311,7 +311,7 @@ javaScript = function(app, appModule, moduleData) {
               sound: false
             });
           }
-          
+
           // Check console settings
           if (moduleData.module.reporting.console === true) {
             console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -321,7 +321,7 @@ javaScript = function(app, appModule, moduleData) {
       });
     }));
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -332,45 +332,45 @@ var less;
 
 less = function(app, appModule, moduleData) {
   var cssMinifyLevel, dep, distFileNameMain, distPathMain, ifAutoPrefixer, ifMinify, ifSourceMaps, lessConfig, srcPathMain, taskName;
-  
+
   // Set task name
   taskName = 'less';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // SRC path
   srcPathMain = moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'less/layout.less';
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   // DIST file name
   distFileNameMain = moduleData.module.distName;
-  
+
   // Less config
   lessConfig = {};
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.allowMain === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
-    
+
     // Load files
-    
+
     // Load possible error reports
     // Load sourcemaps if supported
     stream = dep.gulp.src(srcPathMain).pipe(dep.gulpPlumberNofifier()).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -378,11 +378,11 @@ less = function(app, appModule, moduleData) {
         largeFile: true
       });
     // Load Less with config
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.less(lessConfig)).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Rename output file to config value
     // Write sourcemap if supported
     })).pipe(dep.gulpRename(distFileNameMain + ".css")).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -390,9 +390,9 @@ less = function(app, appModule, moduleData) {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -404,15 +404,15 @@ less = function(app, appModule, moduleData) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.reporting.notification === true) {
           dep.notify.notify({
@@ -421,7 +421,7 @@ less = function(app, appModule, moduleData) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -429,11 +429,11 @@ less = function(app, appModule, moduleData) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + distFileNameMain + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -442,7 +442,7 @@ less = function(app, appModule, moduleData) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -453,69 +453,69 @@ var lessAdditional;
 
 lessAdditional = function(app, appModule, moduleData, path) {
   var cssMinifyLevel, dep, distPathMain, fileName, ifAutoPrefixer, ifMinify, ifSourceMaps, lessConfig, srcPathMain, taskName;
-  
+
   // Set task name
   taskName = 'lessAdditional';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // Get current file name
   fileName = dep.path.basename(path);
   fileName = fileName.replace(dep.path.extname(path), "");
-  
+
   // SRC path
   srcPathMain = path;
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   // Less config
   lessConfig = {};
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.separateFiles === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
-    
+
     // Load files
-    
+
     // Load possible error reports
-    
+
     // Load Less with config
-    
+
     // Load sourcemaps if supported
     stream = dep.gulp.src(srcPathMain).pipe(dep.gulpPlumberNofifier()).pipe(dep.less(lessConfig)).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.init({
         largeFile: true
       });
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Write sourcemap if supported
     })).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.write('', {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -527,15 +527,15 @@ lessAdditional = function(app, appModule, moduleData, path) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.additionalFiles.reporting.notification === true) {
           dep.notify.notify({
@@ -544,7 +544,7 @@ lessAdditional = function(app, appModule, moduleData, path) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.additionalFiles.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -552,11 +552,11 @@ lessAdditional = function(app, appModule, moduleData, path) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + fileName + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -565,7 +565,7 @@ lessAdditional = function(app, appModule, moduleData, path) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -576,59 +576,59 @@ var nodeSass;
 
 nodeSass = function(app, appModule, moduleData) {
   var cssMinifyLevel, dep, distFileNameMain, distPathMain, ifAutoPrefixer, ifMinify, ifSourceMaps, sassConfig, srcPathMain, taskName;
-  
+
   // Set task name
   taskName = 'nodeSassMain';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // SRC path
   srcPathMain = moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'nodeSass/layout.sass';
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   // DIST file name
   distFileNameMain = moduleData.module.distName;
-  
+
   // Sass config
   sassConfig = {};
   sassConfig.outputStyle = 'nested';
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.allowMain === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
-    
+
     // Load files
-    
+
     // Load possible error reports
     // Load sourcemaps if supported
     stream = dep.gulp.src(srcPathMain).pipe(dep.gulpPlumberNofifier()).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.init({
         largeFile: true
       });
-    
+
     // Load Sass with config
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.nodeSass(sassConfig)).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Rename output file to config value
     // Write sourcemap if supported
     })).pipe(dep.gulpRename(distFileNameMain + ".css")).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -636,9 +636,9 @@ nodeSass = function(app, appModule, moduleData) {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -650,15 +650,15 @@ nodeSass = function(app, appModule, moduleData) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.reporting.notification === true) {
           dep.notify.notify({
@@ -667,7 +667,7 @@ nodeSass = function(app, appModule, moduleData) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -675,11 +675,11 @@ nodeSass = function(app, appModule, moduleData) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + distFileNameMain + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -688,7 +688,7 @@ nodeSass = function(app, appModule, moduleData) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -699,69 +699,69 @@ var nodeSassAdditional;
 
 nodeSassAdditional = function(app, appModule, moduleData, path) {
   var cssMinifyLevel, dep, distPathMain, fileName, ifAutoPrefixer, ifMinify, ifSourceMaps, sassConfig, srcPathMain, taskName;
-  
+
   // Set task name
   taskName = 'nodeSassAdditional';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // Get current file name
   fileName = dep.path.basename(path);
   fileName = fileName.replace(dep.path.extname(path), "");
-  
+
   // SRC path
   srcPathMain = path;
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   // Sass config
   sassConfig = {};
   sassConfig.outputStyle = 'nested';
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.separateFiles === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
-    
+
     // Load files
-    
+
     // Load possible error reports
     // Load sourcemaps if supported
     stream = dep.gulp.src(srcPathMain).pipe(dep.gulpPlumberNofifier()).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.init({
         largeFile: true
       });
-    
+
     // Load Sass with config
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.nodeSass(sassConfig)).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Write sourcemap if supported
     })).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.write('', {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -773,15 +773,15 @@ nodeSassAdditional = function(app, appModule, moduleData, path) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.additionalFiles.reporting.notification === true) {
           dep.notify.notify({
@@ -790,7 +790,7 @@ nodeSassAdditional = function(app, appModule, moduleData, path) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.additionalFiles.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -798,11 +798,11 @@ nodeSassAdditional = function(app, appModule, moduleData, path) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + fileName + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -811,7 +811,7 @@ nodeSassAdditional = function(app, appModule, moduleData, path) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -822,58 +822,58 @@ var rubySass;
 
 rubySass = function(app, appModule, moduleData) {
   var cssMinifyLevel, dep, distFileNameMain, distPathMain, ifAutoPrefixer, ifMinify, ifSourceMaps, sassConfig, srcPathMain, taskName;
-  
+
   // Set task name
   taskName = 'rubySassMain';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // SRC path
   srcPathMain = moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'rubySass/layout.sass';
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   // DIST file name
   distFileNameMain = moduleData.module.distName;
-  
+
   // Sass config
   sassConfig = {};
   sassConfig.outputStyle = 'nested';
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.allowMain === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
     stream = dep.rubySass(srcPathMain, {
       style: "nested"
-    
+
     // Load possible error reports
-    
+
     // Load sourcemaps if supported
     }).pipe(dep.gulpPlumberNofifier()).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.init({
         largeFile: true
       });
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Rename output file to config value
     // Write sourcemap if supported
     })).pipe(dep.gulpRename(distFileNameMain + ".css")).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -881,9 +881,9 @@ rubySass = function(app, appModule, moduleData) {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -895,15 +895,15 @@ rubySass = function(app, appModule, moduleData) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.reporting.notification === true) {
           dep.notify.notify({
@@ -912,7 +912,7 @@ rubySass = function(app, appModule, moduleData) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -920,11 +920,11 @@ rubySass = function(app, appModule, moduleData) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + distFileNameMain + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -933,7 +933,7 @@ rubySass = function(app, appModule, moduleData) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -944,64 +944,64 @@ var rubySassAdditional;
 
 rubySassAdditional = function(app, appModule, moduleData, path) {
   var cssMinifyLevel, dep, distPathMain, fileName, ifAutoPrefixer, ifMinify, ifSourceMaps, srcPathMain, taskName;
-  
+
   // Set task name
   taskName = 'rubySassAdditional';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // Get current file name
   fileName = dep.path.basename(path);
   fileName = fileName.replace(dep.path.extname(path), "");
-  
+
   // SRC path
   srcPathMain = path;
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.separateFiles === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
     stream = dep.rubySass(srcPathMain, {
       style: "nested"
-    
+
     // Load possible error reports
-    
+
     // Load sourcemaps if supported
     }).pipe(dep.gulpPlumberNofifier()).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.init({
         largeFile: true
       });
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Write sourcemap if supported
     })).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.write('', {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -1013,15 +1013,15 @@ rubySassAdditional = function(app, appModule, moduleData, path) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.additionalFiles.reporting.notification === true) {
           dep.notify.notify({
@@ -1030,7 +1030,7 @@ rubySassAdditional = function(app, appModule, moduleData, path) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.additionalFiles.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -1038,11 +1038,11 @@ rubySassAdditional = function(app, appModule, moduleData, path) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + fileName + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -1051,7 +1051,7 @@ rubySassAdditional = function(app, appModule, moduleData, path) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -1062,45 +1062,45 @@ var stylus;
 
 stylus = function(app, appModule, moduleData) {
   var cssMinifyLevel, dep, distFileNameMain, distPathMain, ifAutoPrefixer, ifMinify, ifSourceMaps, srcPathMain, stylusConfig, taskName;
-  
+
   // Set task name
   taskName = 'stylus';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // SRC path
   srcPathMain = moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'stylus/layout.styl';
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   // DIST file name
   distFileNameMain = moduleData.module.distName;
-  
+
   // Stylus config
   stylusConfig = {};
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.allowMain === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
-    
+
     // Load files
-    
+
     // Load possible error reports
     // Load sourcemaps if supported
     stream = dep.gulp.src(srcPathMain).pipe(dep.gulpPlumberNofifier()).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -1108,11 +1108,11 @@ stylus = function(app, appModule, moduleData) {
         largeFile: true
       });
     // Load Stylus with config
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.stylus(stylusConfig)).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Rename output file to config value
     // Write sourcemap if supported
     })).pipe(dep.gulpRename(distFileNameMain + ".css")).pipe(dep.gulpCond(ifSourceMaps === true, function() {
@@ -1120,9 +1120,9 @@ stylus = function(app, appModule, moduleData) {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -1134,15 +1134,15 @@ stylus = function(app, appModule, moduleData) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.reporting.notification === true) {
           dep.notify.notify({
@@ -1151,7 +1151,7 @@ stylus = function(app, appModule, moduleData) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -1159,11 +1159,11 @@ stylus = function(app, appModule, moduleData) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + distFileNameMain + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -1172,7 +1172,7 @@ stylus = function(app, appModule, moduleData) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -1183,69 +1183,69 @@ var stylusAdditional;
 
 stylusAdditional = function(app, appModule, moduleData, path) {
   var cssMinifyLevel, dep, distPathMain, fileName, ifAutoPrefixer, ifMinify, ifSourceMaps, srcPathMain, stylusConfig, taskName;
-  
+
   // Set task name
   taskName = 'stylusAdditional';
-  
+
   // Get dependencies
   dep = app.globals.dependencies;
-  
+
   // Get current file name
   fileName = dep.path.basename(path);
   fileName = fileName.replace(dep.path.extname(path), "");
-  
+
   // SRC path
   srcPathMain = path;
-  
+
   // DIST path
   distPathMain = moduleData.path + '/' + moduleData.config.paths.distFolder + '/css';
-  
+
   // Stylus config
   stylusConfig = {};
-  
+
   //Get IF values
 
   // If Source Maps
   ifSourceMaps = moduleData.module.sourceMaps;
-  
+
   // If AutoPrefixer
   ifAutoPrefixer = moduleData.module.modules.autoPrefix;
-  
+
   // If minify CSS
   if (moduleData.module.allowMinify.support === true && moduleData.module.allowMinify.separateFiles === true) {
     ifMinify = true;
     cssMinifyLevel = moduleData.module.allowMinify.level;
   }
-  
+
   // Set up gulp task
   dep.gulp.task(taskName, function(done) {
     var stream;
-    
+
     // Load files
-    
+
     // Load possible error reports
-    
+
     // Load Stylus with config
-    
+
     // Load sourcemaps if supported
     stream = dep.gulp.src(srcPathMain).pipe(dep.gulpPlumberNofifier()).pipe(dep.stylus(stylusConfig)).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.init({
         largeFile: true
       });
-    
+
     // Load autoprefixer if supported
     })).pipe(dep.gulpCond(ifAutoPrefixer === true, function() {
       return dep.gulpPostCss([dep.autoPrefixer()]);
-    
+
     // Write sourcemap if supported
     })).pipe(dep.gulpCond(ifSourceMaps === true, function() {
       return dep.gulpSourceMaps.write('', {
         includeContent: false,
         sourceRoot: srcPathMain
       });
-    
+
     // Output files
-    
+
     // Load minify if supported
     })).pipe(dep.gulp.dest(distPathMain)).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulpCSSminify({
@@ -1257,15 +1257,15 @@ stylusAdditional = function(app, appModule, moduleData, path) {
       });
     })).pipe(dep.gulpCond(ifMinify === true, function() {
       return dep.gulp.dest(distPathMain);
-    
+
     // Report positive result in console and notification if supported
     })).pipe(dep.gulpTap(function(file) {
       var fileExtension;
       fileExtension = dep.path.extname(file.path).substr(1);
-      
+
       // Do not log for map and min files
       if (fileExtension !== 'map' && fileExtension !== 'min') {
-        
+
         // Check notification settings
         if (moduleData.module.additionalFiles.reporting.notification === true) {
           dep.notify.notify({
@@ -1274,7 +1274,7 @@ stylusAdditional = function(app, appModule, moduleData, path) {
             sound: false
           });
         }
-        
+
         // Check console settings
         if (moduleData.module.additionalFiles.reporting.console === true) {
           console.log(dep.colors.blue(moduleData.config.projectName + ' - ' + taskName));
@@ -1282,11 +1282,11 @@ stylusAdditional = function(app, appModule, moduleData, path) {
         }
       }
     }));
-    
+
     // Cleanup after the task
     return stream.on('finish', function() {
       var extraMapFileExists, extramapFilePath;
-      
+
       // Clean extra map files
       extramapFilePath = distPathMain + '/' + fileName + '.css.min.map';
       extraMapFileExists = dep.fs.existsSync(extramapFilePath);
@@ -1295,7 +1295,7 @@ stylusAdditional = function(app, appModule, moduleData, path) {
       }
     });
   });
-  
+
   // Start the task
   dep.gulp.start(taskName);
 };
@@ -1308,27 +1308,27 @@ buildImportsBundle = function(app, appModule, moduleData, srcPath) {
   var additionalFilesPath, buildMainJS, dep, fileContent, importPathFix, srcFolderPath;
   // Get dependencies
   dep = app.globals.dependencies;
-  
-  // Set vars   
+
+  // Set vars
   srcFolderPath = srcPath + '/scripts';
   additionalFilesPath = moduleData.module.additionalFiles.srcFolder;
   importPathFix = moduleData.path + '/' + moduleData.config.paths.srcFolder + '/javaScript/scripts/';
   // Set the function that returns a file content for the auto import bundle
   buildMainJS = function() {
     var fileTree, importsString, objectBody, objectFooter, objectHeader, treeSearch, uniqueId;
-    
+
     // Get all files for import
     fileTree = dep.dirTree(srcFolderPath);
-    
+
     // Set default string for opening and closing of the object
     objectHeader = 'var exportObject = {';
     objectFooter = '}; export default exportObject;';
     objectBody = '';
-    
+
     // Prepare variables for generating imports
     importsString = '';
     uniqueId = 0;
-    
+
     // Generate imports and prepare them as string
     treeSearch = function(treeLevel) {
       var fileContents, fileName, i, importPath, len, prefix, suffix;
@@ -1336,7 +1336,7 @@ buildImportsBundle = function(app, appModule, moduleData, srcPath) {
       i = 0;
       len = treeLevel.length;
       while (i < len) {
-        
+
         // Excluded
         if (treeLevel[i].name === '.babelrc' || treeLevel[i].name === additionalFilesPath || treeLevel[i].name === 'importsBundle.js' || treeLevel[i].name === 'manualBundle.js') {
           i++;
@@ -1352,40 +1352,40 @@ buildImportsBundle = function(app, appModule, moduleData, srcPath) {
         // If file
         if (treeLevel[i].type === 'file') {
           uniqueId++;
-          
+
           // Build object
           fileName = treeLevel[i].name;
           fileName = fileName.replace(treeLevel[i].extension, '');
           objectBody += fileName + ' :' + fileName + '_' + uniqueId + ',';
-          
+
           // Build import list
           importPath = treeLevel[i].path;
-          
+
           // Check if all files are formatted properly, if not, wrap them properly so we dont end up generating errors
-          fileContents = dep.fs.readFileSync(importPath, 'utf8');
-          if (fileContents.indexOf('export default') === -1) {
-            prefix = '';
-            suffix = '';
-            
-            // React to different file types
-            if (treeLevel[i].extension === '.js' || treeLevel[i].extension === '.jsx' || treeLevel[i].extension === '.ts') {
-              prefix = 'let ' + fileName + ' = function () {\n\n';
-              suffix = '};\nexport default ' + fileName + ';';
-            }
-            if (treeLevel[i].extension === '.coffee') {
-              prefix = fileName + ' = () ->\n\n';
-              suffix = 'export default ' + fileName;
-            }
-            fileContents = prefix + fileContents + suffix;
-            dep.fs.writeFileSync(importPath, fileContents, 'utf8');
-          }
-          
+          // fileContents = dep.fs.readFileSync(importPath, 'utf8');
+          // if (fileContents.indexOf('export default') === -1) {
+          //   prefix = '';
+          //   suffix = '';
+          //
+          //   // React to different file types
+          //   if (treeLevel[i].extension === '.js' || treeLevel[i].extension === '.jsx' || treeLevel[i].extension === '.ts') {
+          //     prefix = 'let ' + fileName + ' = function () {\n\n';
+          //     suffix = '};\nexport default ' + fileName + ';';
+          //   }
+          //   if (treeLevel[i].extension === '.coffee') {
+          //     prefix = fileName + ' = () ->\n\n';
+          //     suffix = 'export default ' + fileName;
+          //   }
+          //   fileContents = prefix + fileContents + suffix;
+          //   dep.fs.writeFileSync(importPath, fileContents, 'utf8');
+          // }
+
           // Fix backslashes
           importPath = importPath.replace(/\\/g, '/');
-          
+
           // Fix pathing for imports
           importPath = importPath.replace(importPathFix, '');
-          
+
           // Add file to import string
           importsString += 'import ' + fileName + '_' + uniqueId + ' from \'./scripts/' + importPath + '\';';
         }
@@ -1393,6 +1393,7 @@ buildImportsBundle = function(app, appModule, moduleData, srcPath) {
       }
     };
     treeSearch(fileTree);
+    importsString = importsString.replace(/~/g, '')
     return importsString + objectHeader + objectBody + objectFooter;
   };
   fileContent = buildMainJS();
@@ -1407,7 +1408,7 @@ _manager = function(app, config, command, path) {
   var appModule, srcPath;
   appModule = app.gulpCompilers;
   switch (command) {
-    
+
     //#####################
     /*  JS COMPILERS  */
     //#####################
@@ -1415,12 +1416,12 @@ _manager = function(app, config, command, path) {
     // Run JS Compiler
     case 'javaScript':
       return appModule.javaScript(app, appModule, config);
-    
+
     // Refrssh imports bundle on added files
     case 'javaScriptRefresh':
       srcPath = config.path + '/' + config.config.paths.srcFolder + '/' + 'javaScript/';
       return appModule._javaScript.buildImportsBundle(app, appModule, config, srcPath);
-    
+
     //######################
     /*  CSS COMPILERS  */
     //######################
@@ -1465,7 +1466,7 @@ moduleLoader = function(app, projectList) {
     project = projectList[i];
     // Set compilers vars for easier readability
     config = project.config.modules.compilers;
-    
+
     //######################
     /* Check compilers */
     //######################
@@ -1473,12 +1474,12 @@ moduleLoader = function(app, projectList) {
     // If Java Script support
     if (config.javaScript.support === true) {
       moduleList.compilers.javaScript = true;
-      
+
       // If Coffee Script support
       if (config.javaScript.modules.coffeeScript.support === true) {
         moduleList.compilers.coffeeScript = true;
       }
-      
+
       // If Type Script support
       if (config.javaScript.modules.typeScript.support === true) {
         moduleList.compilers.typeScript = true;
@@ -1487,36 +1488,36 @@ moduleLoader = function(app, projectList) {
       if (config.javaScript.modules.jsx.support === true) {
         moduleList.compilers.jsx = true;
       }
-      
+
       // If Babel support
       if (config.javaScript.modules.babel.support === true) {
         moduleList.compilers.babel = true;
       }
     }
-    
+
     // If CSS compiler support
     if (config.cssPreprocessors.support === true) {
       // If Node Sass support
       if (config.cssPreprocessors.modules.nodeSass.support === true) {
         moduleList.compilers.nodeSass = true;
       }
-      
+
       // If Ruby Sass support
       if (config.cssPreprocessors.modules.rubySass.support === true) {
         moduleList.compilers.rubySass = true;
       }
-      
+
       // If Less support
       if (config.cssPreprocessors.modules.less.support === true) {
         moduleList.compilers.less = true;
       }
-      
+
       // If Stylus support
       if (config.cssPreprocessors.modules.stylus.support === true) {
         moduleList.compilers.stylus = true;
       }
     }
-    
+
     //######################
     /* Check Utilities */
     //######################
@@ -1527,106 +1528,106 @@ moduleLoader = function(app, projectList) {
       if (config.javaScript.sourceMaps === true) {
         moduleList.utilities.sourceMaps = true;
       }
-      
+
       // If Minify support
       if (config.javaScript.allowMinify.support === true) {
         moduleList.utilities.minify = true;
       }
-      
+
       // If Concat support
       if (config.javaScript.additionalFiles.support === true) {
         moduleList.utilities.concat = true;
       }
     }
-    
+
     // If CSS compiler support
     if (config.cssPreprocessors.support === true) {
       // If Node Sass support
       if (config.cssPreprocessors.modules.nodeSass.support === true) {
         moduleList.compilers.nodeSass = true;
-        
+
         // If Source Map support
         if (config.cssPreprocessors.modules.nodeSass.sourceMaps === true) {
           moduleList.utilities.sourceMaps = true;
         }
-        
+
         // If Glob Sass support
         if (config.cssPreprocessors.modules.nodeSass.modules.globSass === true) {
           moduleList.utilities.globNodeSass = true;
         }
-        
+
         // If Auto Prefix support
         if (config.cssPreprocessors.modules.nodeSass.modules.autoPrefix === true) {
           moduleList.utilities.autoPrefixCSS = true;
         }
-        
+
         // If Minify support
         if (config.cssPreprocessors.modules.nodeSass.allowMinify.support === true) {
           moduleList.utilities.minify = true;
         }
       }
-      
+
       // If Ruby Sass support
       if (config.cssPreprocessors.modules.rubySass.support === true) {
         moduleList.compilers.rubySass = true;
-        
+
         // If Source Map support
         if (config.cssPreprocessors.modules.rubySass.sourceMaps === true) {
           moduleList.utilities.sourceMaps = true;
         }
-        
+
         // If Auto Prefix support
         if (config.cssPreprocessors.modules.rubySass.modules.autoPrefix === true) {
           moduleList.utilities.autoPrefixCSS = true;
         }
-        
+
         // If Minify support
         if (config.cssPreprocessors.modules.rubySass.allowMinify.support === true) {
           moduleList.utilities.minify = true;
         }
       }
-      
+
       // If Less support
       if (config.cssPreprocessors.modules.less.support === true) {
         moduleList.compilers.less = true;
-        
+
         // If Source Map support
         if (config.cssPreprocessors.modules.less.sourceMaps === true) {
           moduleList.utilities.sourceMaps = true;
         }
-        
+
         // If Auto Prefix support
         if (config.cssPreprocessors.modules.less.modules.autoPrefix === true) {
           moduleList.utilities.autoPrefixCSS = true;
         }
-        
+
         // If Minify support
         if (config.cssPreprocessors.modules.less.allowMinify.support === true) {
           moduleList.utilities.minify = true;
         }
       }
-      
+
       // If Stylus support
       if (config.cssPreprocessors.modules.stylus.support === true) {
         moduleList.compilers.stylus = true;
-        
+
         // If Source Map support
         if (config.cssPreprocessors.modules.stylus.sourceMaps === true) {
           moduleList.utilities.sourceMaps = true;
         }
-        
+
         // If Auto Prefix support
         if (config.cssPreprocessors.modules.stylus.modules.autoPrefix === true) {
           moduleList.utilities.autoPrefixCSS = true;
         }
-        
+
         // If Minify support
         if (config.cssPreprocessors.modules.stylus.allowMinify.support === true) {
           moduleList.utilities.minify = true;
         }
       }
     }
-    
+
     //######################
     /* Check Custom    */
     //######################
@@ -1635,16 +1636,16 @@ moduleLoader = function(app, projectList) {
     if (config.javaScript.support === true) {
       // If Build helper support
       if (config.javaScript.buildHelper.support === true) {
-        
+
         // If Build helper - Auto Fix
         if (config.javaScript.buildHelper.autoFix.support === true) {
-          
+
           // If Build helper - Auto Fix - Fix new files
           if (config.javaScript.buildHelper.autoFix.modules.fixNewFiles === true) {
             moduleList.custom.fixNewFilesJS = true;
           }
         }
-        
+
         // If Build helper - Auto Build
         if (config.javaScript.buildHelper.autoBuild.support === true) {
           moduleList.custom.autoBuild = true;
@@ -1661,33 +1662,35 @@ var projectCycler;
 projectCycler = function(app, appModule, projectList) {
   var config, curProjectCheck, curProjectDirName, dep, i, len, moduleData, path, project, results, watcher;
   dep = app.globals.dependencies;
-  
+
   // Warn user that we are running in only current project mode
   if (app.globals.config.allowOnlyOnCurrent === true) {
     console.log(dep.colors.yellow('The application is running in "current project" mode. Only project from whose directory gulp was called will be processed.'));
   }
-  
+
   // Load watcher function
   watcher = appModule.watcherSwitch;
   results = [];
   for (i = 0, len = projectList.length; i < len; i++) {
     project = projectList[i];
-    
+
     // Check if project is current
     curProjectDirName = project.path.split("/").pop();
     curProjectCheck = process.env.INIT_CWD;
     curProjectCheck = curProjectCheck.split("\\").pop();
     curProjectCheck = project.name === curProjectCheck || curProjectDirName === curProjectCheck;
-    
+
     // Check if we are running the app for only current project or for all that went through the load filter
     if (app.globals.config.allowOnlyOnCurrent === false || curProjectCheck > 0) {
-      
+
       //Load project config
       config = project.config;
-      
+
       // Set var for easier access to project path
       path = project.path;
-      
+
+      console.log(path);
+
       // Run watcher for JS
       if (config.modules.compilers.javaScript.support === true) {
         moduleData = {
@@ -1698,10 +1701,10 @@ projectCycler = function(app, appModule, projectList) {
         };
         watcher(app, moduleData);
       }
-      
+
       // Run watches for CSS
       if (config.modules.compilers.cssPreprocessors.support === true) {
-        
+
         // Run watcher for Ruby Sass
         if (config.modules.compilers.cssPreprocessors.modules.rubySass.support === true) {
           moduleData = {
@@ -1712,7 +1715,7 @@ projectCycler = function(app, appModule, projectList) {
           };
           watcher(app, moduleData);
         }
-        
+
         // Run watcher for Node Sass
         if (config.modules.compilers.cssPreprocessors.modules.nodeSass.support === true) {
           moduleData = {
@@ -1723,7 +1726,7 @@ projectCycler = function(app, appModule, projectList) {
           };
           watcher(app, moduleData);
         }
-        
+
         // Run watcher for Less
         if (config.modules.compilers.cssPreprocessors.modules.less.support === true) {
           moduleData = {
@@ -1734,7 +1737,7 @@ projectCycler = function(app, appModule, projectList) {
           };
           watcher(app, moduleData);
         }
-        
+
         // Run watcher for Stylus
         if (config.modules.compilers.cssPreprocessors.modules.stylus.support === true) {
           moduleData = {
@@ -1763,20 +1766,20 @@ var requireCompilerDependencies;
 
 requireCompilerDependencies = function(app) {
   var dep, list;
-  
+
   // Load dependencies depending on what we will need based on the list of globally supported modules loaded from the modules
 
   // Set reference for easier readability/edits
   dep = app.globals.dependencies;
   list = app.globals.moduleList;
-  
+
   //###############################
   /* Java Script dependencies */
   //###############################
   if (list.compilers.javaScript === true) {
     dep.rollup = require('gulp-better-rollup');
     dep.gulpBabel = require('gulp-babel');
-    
+
     // Coffee script dependencies
     if (list.compilers.coffeeScript === true) {
       dep.rollupCoffeeScript = require('rollup-plugin-coffee-script');
@@ -1785,7 +1788,7 @@ requireCompilerDependencies = function(app) {
     if (list.compilers.babel === true || list.compilers.jsx === true) {
       dep.rollupBabel = require('rollup-plugin-babel');
     }
-    
+
     // JSX dependencies (none special)
 
     // Type script dependencies
@@ -1793,7 +1796,7 @@ requireCompilerDependencies = function(app) {
       dep.rollupTypeScript = require('rollup-plugin-typescript2');
     }
   }
-  
+
   //###############################
   /*     CSS dependencies     */
   //###############################
@@ -1806,12 +1809,12 @@ requireCompilerDependencies = function(app) {
   if (list.compilers.rubySass === true) {
     dep.rubySass = require('gulp-ruby-sass');
   }
-  
+
   // Less dependencies
   if (list.compilers.less === true) {
     dep.less = require('gulp-less');
   }
-  
+
   // Stylus dependencies
   if (list.compilers.stylus === true) {
     dep.stylus = require('gulp-stylus');
@@ -1825,7 +1828,7 @@ requireCompilerDependencies = function(app) {
     dep.gulpJSminify = require('gulp-uglify');
     dep.gulpCSSminify = require('gulp-clean-css');
   }
-  
+
   // Concat dependencies
   if (list.utilities.concat === true) {
     dep.gulpConcat = require('gulp-concat');
@@ -1847,13 +1850,13 @@ var watcherSwitch;
 
 watcherSwitch = function(app, moduleData) {
   var compilerModule, watcherModule, watcherPath;
-  
+
   // Get Chokidar dependency
   watcherModule = app.globals.dependencies.watcher;
-  
+
   // Get compiler module
   compilerModule = app.gulpCompilers;
-  
+
   // React to different inputs
   switch (moduleData.name) {
     //#####################
@@ -1864,16 +1867,16 @@ watcherSwitch = function(app, moduleData) {
     case 'javaScript':
       // Set watcher path array
       watcherPath = [];
-      
+
       // Add core path
       watcherPath.push(moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'javaScript/scripts');
-      
+
       // Additional path
       watcherPath.push(watcherPath[0] + '/' + moduleData.module.additionalFiles.srcFolder);
-      
+
       // IF NOT supporting additional files
       if (moduleData.module.additionalFiles.support === false) {
-        
+
         // Add watcher for javaScript module
         watcherModule.watch([watcherPath[0], '!' + watcherPath[1]], {
           ignoreInitial: true
@@ -1889,10 +1892,10 @@ watcherSwitch = function(app, moduleData) {
           return compilerModule._manager(app, moduleData, 'javaScriptRefresh');
         });
       }
-      
+
       // IF supporting additional files AND main ones
       if (moduleData.module.additionalFiles.support === true && moduleData.module.additionalFiles.onlyAdditional === false) {
-        
+
         // Add watcher for javaScript AND javaScriptAdditional module
         watcherModule.watch(watcherPath[0], {
           ignoreInitial: true
@@ -1908,10 +1911,10 @@ watcherSwitch = function(app, moduleData) {
           return compilerModule._manager(app, moduleData, 'javaScriptRefresh');
         });
       }
-      
+
       // IF supporting ONLY additional files
       if (moduleData.module.additionalFiles.support === true && moduleData.module.additionalFiles.onlyAdditional === true) {
-        
+
         // Add watcher for javaScript AND javaScriptAdditional module
         return watcherModule.watch(watcherPath[1], {}).on('change', function(path, event) {
           return compilerModule._manager(app, moduleData, 'javaScript');
@@ -1926,108 +1929,108 @@ watcherSwitch = function(app, moduleData) {
     case 'rubySass':
       // Set watcher path array
       watcherPath = [];
-      
+
       // Add core path
       watcherPath.push(moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'rubySass');
-      
+
       // Additional path
       watcherPath.push(watcherPath[0] + '/' + moduleData.module.additionalFiles.srcFolder);
-      
+
       // Add watcher for rubySass module
       watcherModule.watch([watcherPath[0], '!' + watcherPath[1]], {}).on(['change'], function(path, event) {
         return compilerModule._manager(app, moduleData, 'rubySass');
       });
-      
+
       // IF supporting additional files
       if (moduleData.module.additionalFiles.support === true) {
         // Additional ignore path
         watcherPath.push('!' + watcherPath[1] + '/' + moduleData.module.additionalFiles.ignoreFolder);
-        
+
         // Add watcher for rubySass module - additional files
         return watcherModule.watch([watcherPath[1], watcherPath[2]], {}).on(['change'], function(path, event) {
           return compilerModule._manager(app, moduleData, 'rubySassAdditional', path);
         });
       }
       break;
-    
+
     // Node Sass watcher
     case 'nodeSass':
-      
+
       // Set watcher path array
       watcherPath = [];
-      
+
       // Add core path
       watcherPath.push(moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'nodeSass');
       // Additional path
       watcherPath.push(watcherPath[0] + '/' + moduleData.module.additionalFiles.srcFolder);
-      
+
       // Add watcher for nodeSass module
       watcherModule.watch([watcherPath[0], '!' + watcherPath[1]], {}).on(['change'], function(path, event) {
         return compilerModule._manager(app, moduleData, 'nodeSass');
       });
-      
+
       // IF supporting additional files
       if (moduleData.module.additionalFiles.support === true) {
-        
+
         // Additional ignore path
         watcherPath.push('!' + watcherPath[1] + '/' + moduleData.module.additionalFiles.ignoreFolder);
-        
+
         // Add watcher for nodeSass module - additional files
         return watcherModule.watch([watcherPath[1], watcherPath[2]], {}).on(['change'], function(path, event) {
           return compilerModule._manager(app, moduleData, 'nodeSassAdditional', path);
         });
       }
       break;
-    
+
     // Less watcher
     case 'less':
       // Set watcher path array
       watcherPath = [];
-      
+
       // Add core path
       watcherPath.push(moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'less');
-      
+
       // Additional path
       watcherPath.push(watcherPath[0] + '/' + moduleData.module.additionalFiles.srcFolder);
-      
+
       // Add watcher for Less module
       watcherModule.watch([watcherPath[0], '!' + watcherPath[1]], {}).on(['change'], function(path, event) {
         return compilerModule._manager(app, moduleData, 'less');
       });
-      
+
       // IF supporting additional files
       if (moduleData.module.additionalFiles.support === true) {
         // Additional ignore path
         watcherPath.push('!' + watcherPath[1] + '/' + moduleData.module.additionalFiles.ignoreFolder);
-        
+
         // Add watcher for Less module - additional files
         return watcherModule.watch([watcherPath[1], watcherPath[2]], {}).on(['change'], function(path, event) {
           return compilerModule._manager(app, moduleData, 'lessAdditional', path);
         });
       }
       break;
-    
+
     // Stylus watcher
     case 'stylus':
       // Set watcher path array
       watcherPath = [];
-      
+
       // Add core path
       watcherPath.push(moduleData.path + '/' + moduleData.config.paths.srcFolder + '/' + 'stylus');
-      
+
       // Additional path
       watcherPath.push(watcherPath[0] + '/' + moduleData.module.additionalFiles.srcFolder);
-      
+
       // Add watcher for Stylus module
       watcherModule.watch([watcherPath[0], '!' + watcherPath[1]], {}).on(['change'], function(path, event) {
         return compilerModule._manager(app, moduleData, 'stylus');
       });
-      
+
       // IF supporting additional files
       if (moduleData.module.additionalFiles.support === true) {
         // Additional ignore path
         watcherPath.push('!' + watcherPath[1] + '/' + moduleData.module.additionalFiles.ignoreFolder);
-        
+
         // Add watcher for Stylus module - additional files
         return watcherModule.watch([watcherPath[1], watcherPath[2]], {}).on(['change'], function(path, event) {
           return compilerModule._manager(app, moduleData, 'stylusAdditional', path);
@@ -2043,10 +2046,10 @@ var _manager$1;
 _manager$1 = function(app, appModule, projectList) {
   // Check all supported modules and prepare them for loading (sets a global variable)
   appModule.moduleChecker(app, projectList);
-  
+
   // Loads all needed dependencies depending on what we need
   appModule.requireCompilerDependencies(app);
-  
+
   // Engage file watchers for each active project
   return appModule.projectCycler(app, appModule, projectList);
 };
@@ -2154,7 +2157,7 @@ var projectsCheck;
 projectsCheck = function(app, appModule) {
   var allStatuses, compareStatuses, config, countAllProject, countFilteredProjects, curProjectCheck, curProjectDirName, currentMessage, defaultConfig, freshUpdated, i, includedStatues, index, iterateThroughProjectLevel, len, project, projectArray, projectDir, warningMessage;
   config = app.globals.config;
-  
+
   // Global string mesages
   warningMessage = '';
   freshUpdated = '';
@@ -2166,7 +2169,7 @@ projectsCheck = function(app, appModule) {
   defaultConfig = JSON.parse(defaultConfig);
   //Set array of project data for later use
   projectArray = [];
-  // Set base level of projects 
+  // Set base level of projects
   projectDir = config.projectDirectory;
   // Set array of allowed project to process
   allStatuses = ['active', 'onhold', 'finished', 'canceled', 'fresh'];
@@ -2197,7 +2200,7 @@ projectsCheck = function(app, appModule) {
       project = projects[index];
       // Skip files, do only directories
       if (project.type === "directory") {
-        
+
         //Remove the fresh status from a project at the end of a cycle unless it was just created
         removeFresh = true;
         // Fix derpy dirTree path formatting ( \\ instead of / )
@@ -2342,10 +2345,10 @@ var requireCoreDependencies;
 
 requireCoreDependencies = function(app) {
   var dep;
-  
+
   // Set reference for easier readability/edits
   dep = app.globals.dependencies;
-  
+
   // Core
   dep.gulp = require('gulp');
   dep.fs = require('fs-extra');
@@ -2471,18 +2474,18 @@ var _manager$3;
 
 _manager$3 = function(command) {
   var app;
-  
+
   //Self-reference to the parent app
   app = webTemplate;
-  
+
   // React to diffent commands for the app
   switch (command) {
-    
+
     // gulpStart module - Returns an array of objects (projects)
     case 'startUp':
       app.startUp._manager(app, app.startUp);
       break;
-    
+
     // Process the project list
     case 'processProjects':
       app.projectProcessor._manager(app, app.projectProcessor, app.globals.projectList);
